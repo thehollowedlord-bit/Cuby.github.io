@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Games — Cuby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
@@ -16,10 +16,18 @@
   [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
   [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
   [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+  [data-mode="light"]{
+    --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
+    --ink:#20242c; --muted:#6b7280;
+  }
+  [data-mode="light"] .content::before{ opacity:0.08; }
+  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
+
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; display:flex; min-height:100vh; }
   a{ color:inherit; text-decoration:none; }
   h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
+  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
 
   .sidebar{ width:220px; background:var(--panel); border-right:1px solid var(--edge); padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem; position:sticky; top:0; height:100vh; }
   .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
@@ -49,6 +57,19 @@
     background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:18px; overflow:hidden;
     box-shadow:0 24px 50px -28px rgba(0,0,0,0.6);
   }
+    .mascot-box{ width:150px; height:170px; position:relative; flex-shrink:0; }
+  .m-head{ width:56px; height:50px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
+  .m-face{ position:absolute; top:20px; left:50%; transform:translateX(-50%); display:flex; gap:13px; }
+  .m-eye{ width:5px; height:9px; background:#0d0b14; border-radius:2px; }
+  .m-smile{ position:absolute; top:32px; left:50%; transform:translateX(-50%); width:22px; height:10px; border-bottom:3px solid #0d0b14; border-radius:0 0 12px 12px; }
+  .m-torso{ width:70px; height:58px; background:var(--primary); border:3px solid #0d0b14; border-radius:6px; position:absolute; top:58px; left:50%; transform:translateX(-50%); z-index:1; }
+  .m-arm{ width:16px; height:56px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; }
+  .m-arm.left{ top:28px; left:14px; transform:rotate(55deg); transform-origin:top center; }
+  .m-arm.right{ top:28px; right:14px; transform:rotate(-55deg); transform-origin:top center; }
+  .m-leg{ width:20px; height:46px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:112px; }
+  .m-leg.left{ left:38px; }
+  .m-leg.right{ right:38px; }
+  .mascot-mini{ transform:scale(0.55); }
   .game-banner{
     height:220px; background:linear-gradient(135deg, var(--primary), #3a2a8a);
     position:relative; display:flex; align-items:flex-end; padding:1.4rem;
@@ -63,9 +84,9 @@
   .stat-row{ display:flex; gap:1.6rem; margin-bottom:1.4rem; flex-wrap:wrap; }
   .stat{ font-size:0.85rem; color:var(--muted); font-weight:700; }
   .stat b{ color:var(--ink); display:block; font-family:'Baloo 2',sans-serif; font-size:1.3rem; }
-  .btn{ font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem; padding:0.85rem 1.7rem; border-radius:12px; display:inline-block; transition:transform .15s; }
+  .btn{ font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem; padding:0.85rem 1.7rem; border-radius:6px; display:inline-block; transition:transform .1s; border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); }
   .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; box-shadow:0 6px 18px rgba(124,92,255,0.35); }
-  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
 
   footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
 </style>
@@ -73,7 +94,13 @@
 <body>
 
 <aside class="sidebar">
-  <div class="logo"><span class="cube"></span>Cuby</div>
+  <div class="logo"><svg class="cube" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+  <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>Cuby</div>
   <div class="nav-group">
     <div class="nav-label">Play</div>
     <a class="nav-item" href="index.html"><span class="ic">🏠</span>Home</a>
@@ -95,7 +122,20 @@
     </div>
 
     <div class="game-detail">
-      <div class="game-banner"><span class="live-badge">LIVE</span></div>
+      <div class="game-banner" style="align-items:center; justify-content:center;">
+        <span class="live-badge">LIVE</span>
+        <div class="mascot-box" style="position:static;">
+          <div class="m-arm left"></div>
+          <div class="m-arm right"></div>
+          <div class="m-torso"></div>
+          <div class="m-head">
+            <div class="m-face"><span class="m-eye"></span><span class="m-eye"></span></div>
+            <div class="m-smile"></div>
+          </div>
+          <div class="m-leg left"></div>
+          <div class="m-leg right"></div>
+        </div>
+      </div>
       <div class="game-detail-body">
         <h2>Cuby</h2>
         <p>The very first Cuby world. Move, jump, sprint, and chat with other players in real time — more worlds are on the way as Cuby grows.</p>
@@ -109,15 +149,22 @@
     </div>
   </div>
 
-  <footer>© <span id="year"></span> Cuby — built by immortalslayer</footer>
+  <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 </div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-  const theme = new URLSearchParams(location.search).get('theme') || 'indigo';
+  const params = new URLSearchParams(location.search);
+  const theme = params.get('theme') || 'indigo';
+  const mode = params.get('mode') || 'dark';
   if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
+  if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
   document.querySelectorAll('a[href$=".html"]').forEach(a=>{
-    if(theme !== 'indigo') a.href = a.getAttribute('href') + '?theme=' + theme;
+    const base = a.getAttribute('href').split('?')[0];
+    const qs = [];
+    if(theme !== 'indigo') qs.push('theme=' + theme);
+    if(mode === 'light') qs.push('mode=light');
+    a.href = qs.length ? base + '?' + qs.join('&') : base;
   });
 </script>
 

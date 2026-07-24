@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings — Cuby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
@@ -16,10 +16,17 @@
   [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
   [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
   [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+  [data-mode="light"]{
+    --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
+    --ink:#20242c; --muted:#6b7280;
+  }
+  [data-mode="light"] .content::before{ opacity:0.08; }
+  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; display:flex; min-height:100vh; }
   a{ color:inherit; text-decoration:none; }
   h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
+  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
 
   .sidebar{ width:220px; background:var(--panel); border-right:1px solid var(--edge); padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem; position:sticky; top:0; height:100vh; }
   .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
@@ -45,7 +52,7 @@
   .page-head .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.05em; text-transform:uppercase; }
   .page-head h1{ font-size:2rem; margin-top:0.4rem; }
 
-  .settings-block{ background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:16px; padding:1.8rem; box-shadow:0 24px 50px -28px rgba(0,0,0,0.6); }
+  .settings-block{ background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:1.8rem; border:3px solid var(--edge); box-shadow:0 24px 50px -28px rgba(0,0,0,0.6); }
   .settings-block h3{ font-size:1.1rem; margin-bottom:0.4rem; }
   .settings-block > p{ color:var(--muted); font-size:0.85rem; margin-bottom:1.4rem; }
 
@@ -68,7 +75,13 @@
 <body>
 
 <aside class="sidebar">
-  <div class="logo"><span class="cube"></span>Cuby</div>
+  <div class="logo"><svg class="cube" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+  <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>Cuby</div>
   <div class="nav-group">
     <div class="nav-label">Play</div>
     <a class="nav-item" href="index.html"><span class="ic">🏠</span>Home</a>
@@ -110,9 +123,22 @@
         </div>
       </div>
     </div>
+
+    <div class="settings-block" style="margin-top:1.4rem;">
+      <h3>Appearance</h3>
+      <p>Choose between dark and light mode.</p>
+      <div class="theme-grid" id="modeGrid" style="grid-template-columns:repeat(2, minmax(120px,1fr));">
+        <div class="theme-option" data-mode-value="dark" style="--swatch:#171320; --swatch-deep:#0d0b14;">
+          <div class="swatch"></div><div class="theme-name">Dark</div>
+        </div>
+        <div class="theme-option" data-mode-value="light" style="--swatch:#ffffff; --swatch-deep:#dde3ee;">
+          <div class="swatch"></div><div class="theme-name">Light</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <footer>© <span id="year"></span> Cuby — built by immortalslayer</footer>
+  <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 </div>
 
 <script>
@@ -120,24 +146,38 @@
 
   const params = new URLSearchParams(location.search);
   let currentTheme = params.get('theme') || 'indigo';
+  let currentMode = params.get('mode') || 'dark';
   if(currentTheme !== 'indigo') document.documentElement.setAttribute('data-theme', currentTheme);
+  if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
 
-  const options = document.querySelectorAll('.theme-option');
+  const themeOptions = document.querySelectorAll('.theme-option[data-theme-value]');
+  const modeOptions = document.querySelectorAll('.theme-option[data-mode-value]');
+
   function markSelected(){
-    options.forEach(opt=>{
+    themeOptions.forEach(opt=>{
       opt.classList.toggle('selected', opt.dataset.themeValue === currentTheme);
+    });
+    modeOptions.forEach(opt=>{
+      opt.classList.toggle('selected', opt.dataset.modeValue === currentMode);
     });
   }
   markSelected();
 
-  options.forEach(opt=>{
+  themeOptions.forEach(opt=>{
     opt.addEventListener('click', ()=>{
       currentTheme = opt.dataset.themeValue;
-      if(currentTheme === 'indigo'){
-        document.documentElement.removeAttribute('data-theme');
-      } else {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-      }
+      if(currentTheme === 'indigo') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', currentTheme);
+      markSelected();
+      updateNavLinks();
+    });
+  });
+
+  modeOptions.forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      currentMode = opt.dataset.modeValue;
+      if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
+      else document.documentElement.removeAttribute('data-mode');
       markSelected();
       updateNavLinks();
     });
@@ -146,7 +186,10 @@
   function updateNavLinks(){
     document.querySelectorAll('a[href$=".html"]').forEach(a=>{
       const base = a.getAttribute('href').split('?')[0];
-      a.href = currentTheme !== 'indigo' ? base + '?theme=' + currentTheme : base;
+      const qs = [];
+      if(currentTheme !== 'indigo') qs.push('theme=' + currentTheme);
+      if(currentMode === 'light') qs.push('mode=light');
+      a.href = qs.length ? base + '?' + qs.join('&') : base;
     });
   }
   updateNavLinks();
