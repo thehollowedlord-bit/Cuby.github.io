@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d0b14;
+    --panel: #171320;
+    --panel-2: #1d1829;
+    --edge: #2a2438;
+    --ink: #ece9f7;
+    --muted: #8b85a3;
+    --primary: #7c5cff;
+    --primary-deep: #5b3ddb;
+    --gold: #f5b94d;
+    --green: #4fd18a;
+  }
+  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
+  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
+  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
+  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif;
+    display:flex; min-height:100vh;
+  }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
+  ::selection{ background:var(--primary); color:#fff; }
+  :focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
+
+  .sidebar{
+    width:220px; background:var(--panel); border-right:1px solid var(--edge);
+    padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem;
+    position:sticky; top:0; height:100vh;
+  }
+  .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
+  .logo .cube{
+    width:28px; height:28px; border-radius:8px;
+    background:linear-gradient(150deg, var(--primary), var(--primary-deep));
+    box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08);
+    animation:pulse-glow 3s ease-in-out infinite;
+  }
+  @keyframes pulse-glow{
+    0%,100%{ box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); }
+    50%{ box-shadow:0 4px 18px rgba(124,92,255,0.6), 0 0 0 7px rgba(124,92,255,0.05); }
+  }
+  .nav-group{ display:flex; flex-direction:column; gap:0.2rem; }
+  .nav-label{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 0.7rem; margin-bottom:0.4rem; }
+  .nav-item{
+    display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.7rem; border-radius:10px;
+    font-weight:700; font-size:0.9rem; color:var(--muted); transition:background .15s, color .15s;
+  }
+  .nav-item .ic{ font-size:1.05rem; width:20px; text-align:center; flex-shrink:0; filter:grayscale(1) opacity(0.65); transition:filter .15s; }
+  .nav-item:hover{ background:var(--panel-2); color:var(--ink); }
+  .nav-item.active{ background:linear-gradient(90deg, rgba(124,92,255,0.18), transparent); color:var(--ink); border:1px solid var(--edge); }
+  .nav-item.active .ic{ filter:none; }
+
+  .sidebar-footer{
+    margin-top:auto; display:flex; align-items:center; gap:0.7rem;
+    padding:0.7rem; border-radius:10px; background:var(--panel-2); border:1px solid var(--edge);
+  }
+  .sidebar-footer .av{ width:34px; height:34px; border-radius:50%; background:linear-gradient(150deg,var(--primary),var(--primary-deep)); flex-shrink:0; }
+  .sidebar-footer .name{ font-weight:800; font-size:0.85rem; }
+  .sidebar-footer .sub{ font-size:0.72rem; color:var(--muted); }
+
+  .main{ flex:1; display:flex; flex-direction:column; }
+  .topbar{
+    display:flex; align-items:center; gap:1rem; padding:1rem 1.8rem;
+    border-bottom:1px solid var(--edge);
+  }
+  .search{
+    flex:1; max-width:420px; background:var(--panel); border:1px solid var(--edge); border-radius:20px;
+    padding:0.6rem 1.1rem; font-size:0.85rem; color:var(--muted);
+  }
+  .top-right{ display:flex; align-items:center; gap:0.7rem; margin-left:auto; }
+  .pill{
+    display:flex; align-items:center; gap:0.4rem; background:var(--panel); border:1px solid var(--edge);
+    border-radius:20px; padding:0.4rem 0.85rem; font-weight:800; font-size:0.85rem;
+  }
+  .dot{ width:9px; height:9px; border-radius:50%; }
+  .dot.gold{ background:var(--gold); }
+  .dot.green{ background:var(--green); }
+
+  .content{ padding:2rem 1.8rem 4rem; max-width:1100px; position:relative; }
+  .content::before{ content:''; position:absolute; top:-60px; right:-100px; width:340px; height:340px; background:radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity:0.16; filter:blur(50px); pointer-events:none; z-index:0; }
+  .content > *{ position:relative; z-index:1; }
+
+  .hero{
+    background:linear-gradient(120deg, rgba(124,92,255,0.16), transparent 70%), var(--panel);
+    border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:18px; padding:2.2rem;
+    box-shadow:0 24px 50px -28px rgba(0,0,0,0.6);
+    display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap;
+    margin-bottom:2.4rem;
+  }
+  .hero-text .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.06em; text-transform:uppercase; }
+  .hero-text h1{ font-size:2.2rem; margin:0.5rem 0 0.6rem; }
+  .hero-text p{ color:var(--muted); max-width:420px; line-height:1.6; margin-bottom:1.3rem; }
+  .btn{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem;
+    padding:0.8rem 1.5rem; border-radius:12px; display:inline-block; transition:transform .15s, background .15s;
+  }
+  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; box-shadow:0 6px 18px rgba(124,92,255,0.35); }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-ghost{ border:1px solid var(--edge); color:var(--ink); margin-left:0.7rem; }
+  .btn-ghost:hover{ border-color:var(--primary); color:var(--primary); }
+
+  .mascot-box{ width:130px; height:150px; position:relative; flex-shrink:0; }
+  .m-head{ width:60px; height:54px; background:#ece9f7; border:3px solid #0d0b14; border-radius:12px; position:absolute; top:0; left:50%; transform:translateX(-50%); }
+  .m-face{ position:absolute; top:22px; left:50%; transform:translateX(-50%); display:flex; gap:14px; }
+  .m-eye{ width:5px; height:5px; background:#0d0b14; border-radius:50%; }
+  .m-torso{ width:76px; height:60px; background:var(--primary); border:3px solid #0d0b14; border-radius:12px; position:absolute; top:48px; left:50%; transform:translateX(-50%); }
+  .m-arm{ width:18px; height:50px; background:#ece9f7; border:3px solid #0d0b14; border-radius:8px; position:absolute; top:54px; }
+  .m-arm.left{ left:2px; transform:rotate(16deg); }
+  .m-arm.right{ right:2px; transform:rotate(-16deg); }
+  .m-leg{ width:20px; height:48px; background:#ece9f7; border:3px solid #0d0b14; border-radius:8px; position:absolute; top:102px; }
+  .m-leg.left{ left:30px; }
+  .m-leg.right{ right:30px; }
+
+  .section-head{ margin-bottom:1.1rem; }
+  .section-head .eyebrow{ font-size:0.78rem; color:var(--muted); font-weight:800; }
+  .section-head h2{ font-size:1.4rem; margin-top:0.2rem; }
+
+  .game-card{
+    background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:16px; overflow:hidden;
+    display:flex; gap:1.4rem; padding:1.2rem; align-items:center; flex-wrap:wrap;
+    box-shadow:0 20px 40px -26px rgba(0,0,0,0.6); transition:transform .18s;
+  }
+  .game-card:hover{ transform:translateY(-3px); }
+  .game-thumb{
+    width:160px; height:100px; border-radius:12px; flex-shrink:0;
+    background:linear-gradient(135deg, var(--primary), #3a2a8a);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .game-info{ flex:1; min-width:180px; }
+  .game-info h3{ font-size:1.2rem; margin-bottom:0.3rem; }
+  .game-info p{ color:var(--muted); font-size:0.85rem; margin-bottom:0.6rem; }
+  .game-stats{ display:flex; gap:1rem; font-size:0.8rem; color:var(--muted); font-weight:700; }
+
+  footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
+
+  @media (max-width: 760px){
+    .sidebar{ display:none; }
+    .search{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo"><span class="cube"></span>Cuby</div>
+  <div class="nav-group">
+    <div class="nav-label">Play</div>
+    <a class="nav-item active" href="index.html"><span class="ic">🏠</span>Home</a>
+    <a class="nav-item" href="games.html"><span class="ic">🎮</span>Games</a>
+    <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
+    <a class="nav-item" href="settings.html"><span class="ic">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <span class="av"></span>
+    <div>
+      <div class="name">Guest</div>
+      <div class="sub">Not signed in</div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <input class="search" placeholder="Search Cuby..." />
+    <div class="top-right">
+      <span class="pill"><span class="dot gold"></span>0</span>
+      <span class="pill"><span class="dot green"></span>Online</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="eyebrow">Welcome to Cuby</span>
+        <h1>Build. Play. Repeat.</h1>
+        <p>A blocky world where you play as Cuby — right now there's one world to explore, with more on the way.</p>
+        <a class="btn btn-primary" href="games.html">Play Cuby</a>
+        <a class="btn btn-ghost" href="download.html">Download</a>
+      </div>
+      <div class="mascot-box">
+        <div class="m-arm left"></div>
+        <div class="m-arm right"></div>
+        <div class="m-torso"></div>
+        <div class="m-head"><div class="m-face"><span class="m-eye"></span><span class="m-eye"></span></div></div>
+        <div class="m-leg left"></div>
+        <div class="m-leg right"></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <span class="eyebrow">Featured</span>
+      <h2>Now Playable</h2>
+    </div>
+    <div class="game-card">
+      <div class="game-thumb"></div>
+      <div class="game-info">
+        <h3>Cuby</h3>
+        <p>The very first Cuby world — move, jump, sprint, and chat with other players.</p>
+        <div class="game-stats"><span>👤 Multiplayer</span><span>🟢 Live</span></div>
+      </div>
+      <a class="btn btn-primary" href="games.html">Play</a>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> Cuby — built by immortalslayer</footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const theme = new URLSearchParams(location.search).get('theme') || 'indigo';
+  if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
+  document.querySelectorAll('a[href$=".html"]').forEach(a=>{
+    if(theme !== 'indigo') a.href = a.getAttribute('href') + '?theme=' + theme;
+  });
+</script>
+
+</body>
+</html>
