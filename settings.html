@@ -137,6 +137,9 @@
         </div>
       </div>
     </div>
+
+    <button class="customize-btn" id="saveBtn" style="margin-top:1.4rem; background:var(--primary); color:#fff; border-color:#000;">Save Settings</button>
+    <p id="saveMsg" style="text-align:center; font-size:0.8rem; color:var(--muted); margin-top:0.6rem;"></p>
   </div>
 
   <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
@@ -145,14 +148,17 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  const savedTheme = localStorage.getItem('cubyTheme');
+  const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  let currentTheme = params.get('theme') || 'indigo';
-  let currentMode = params.get('mode') || 'dark';
+  let currentTheme = savedTheme || params.get('theme') || 'indigo';
+  let currentMode = savedMode || params.get('mode') || 'dark';
   if(currentTheme !== 'indigo') document.documentElement.setAttribute('data-theme', currentTheme);
   if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
 
   const themeOptions = document.querySelectorAll('.theme-option[data-theme-value]');
   const modeOptions = document.querySelectorAll('.theme-option[data-mode-value]');
+  const saveMsg = document.getElementById('saveMsg');
 
   function markSelected(){
     themeOptions.forEach(opt=>{
@@ -171,6 +177,7 @@
       else document.documentElement.setAttribute('data-theme', currentTheme);
       markSelected();
       updateNavLinks();
+      saveMsg.textContent = '';
     });
   });
 
@@ -181,7 +188,20 @@
       else document.documentElement.removeAttribute('data-mode');
       markSelected();
       updateNavLinks();
+      saveMsg.textContent = '';
     });
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', ()=>{
+    try{
+      localStorage.setItem('cubyTheme', currentTheme);
+      localStorage.setItem('cubyMode', currentMode);
+      saveMsg.textContent = 'Saved! Your theme will stick around now.';
+      saveMsg.style.color = 'var(--green)';
+    }catch(err){
+      saveMsg.textContent = 'Could not save (browser storage blocked).';
+      saveMsg.style.color = '#e5484d';
+    }
   });
 
   function updateNavLinks(){

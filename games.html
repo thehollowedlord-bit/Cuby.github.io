@@ -162,9 +162,11 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  const savedTheme = localStorage.getItem('cubyTheme');
+  const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  const theme = params.get('theme') || 'indigo';
-  const mode = params.get('mode') || 'dark';
+  const theme = savedTheme || params.get('theme') || 'indigo';
+  const mode = savedMode || params.get('mode') || 'dark';
   if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
   if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
   document.querySelectorAll('a[href$=".html"]').forEach(a=>{
