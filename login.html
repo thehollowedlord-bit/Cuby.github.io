@@ -107,6 +107,10 @@
       <input type="text" id="signupUsername" placeholder="CoolBuilder123" required>
     </div>
     <div>
+      <label for="signupAge">Age</label>
+      <input type="number" id="signupAge" placeholder="13" min="1" max="120" required>
+    </div>
+    <div>
       <label for="signupPassword">Password</label>
       <input type="password" id="signupPassword" placeholder="••••••••" required>
     </div>
@@ -171,7 +175,14 @@
     e.preventDefault();
     const email = document.getElementById('signupEmail').value;
     const username = document.getElementById('signupUsername').value;
+    const age = parseInt(document.getElementById('signupAge').value, 10);
     const password = document.getElementById('signupPassword').value;
+
+    if(!age || age < 13){
+      statusMsg.style.color = '#e5484d';
+      statusMsg.textContent = 'You must be 13 or older to create a Cuby account.';
+      return;
+    }
 
     statusMsg.style.color = 'var(--muted)';
     statusMsg.textContent = 'Creating your account...';
