@@ -118,7 +118,28 @@
   <a href="index.html" class="back-link">← Back to Cuby</a>
 </div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
+    authDomain: "cuby-48249.firebaseapp.com",
+    projectId: "cuby-48249",
+    storageBucket: "cuby-48249.firebasestorage.app",
+    messagingSenderId: "204506566879",
+    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
   const tabs = document.querySelectorAll('.tab');
   const forms = { login: document.getElementById('loginForm'), signup: document.getElementById('signupForm') };
   const statusMsg = document.getElementById('statusMsg');
@@ -133,14 +154,61 @@
     });
   });
 
-  document.getElementById('loginForm').addEventListener('submit', (e)=>{
+  function friendlyError(code){
+    const map = {
+      'auth/email-already-in-use': 'That email is already registered.',
+      'auth/invalid-email': 'That email address looks invalid.',
+      'auth/weak-password': 'Password should be at least 6 characters.',
+      'auth/user-not-found': 'No account found with that email.',
+      'auth/wrong-password': 'Incorrect password.',
+      'auth/invalid-credential': 'Incorrect email or password.',
+      'auth/too-many-requests': 'Too many attempts. Try again in a bit.'
+    };
+    return map[code] || 'Something went wrong. Please try again.';
+  }
+
+  document.getElementById('signupForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    statusMsg.textContent = "Accounts aren't connected yet — this form is a preview.";
+    const email = document.getElementById('signupEmail').value;
+    const username = document.getElementById('signupUsername').value;
+    const password = document.getElementById('signupPassword').value;
+
+    statusMsg.style.color = 'var(--muted)';
+    statusMsg.textContent = 'Creating your account...';
+
+    try{
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(cred.user, { displayName: username });
+      await sendEmailVerification(cred.user);
+      statusMsg.style.color = 'var(--green)';
+      statusMsg.textContent = 'Account created! Check ' + email + ' for a verification link.';
+    }catch(err){
+      statusMsg.style.color = '#e5484d';
+      statusMsg.textContent = friendlyError(err.code);
+    }
   });
 
-  document.getElementById('signupForm').addEventListener('submit', (e)=>{
+  document.getElementById('loginForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    statusMsg.textContent = "Accounts aren't connected yet — this form is a preview.";
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    statusMsg.style.color = 'var(--muted)';
+    statusMsg.textContent = 'Logging in...';
+
+    try{
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      if(!cred.user.emailVerified){
+        statusMsg.style.color = 'var(--gold)';
+        statusMsg.textContent = 'Please verify your email first — check your inbox for the link.';
+        return;
+      }
+      statusMsg.style.color = 'var(--green)';
+      statusMsg.textContent = 'Welcome back, ' + (cred.user.displayName || 'Player') + '!';
+    }catch(err){
+      statusMsg.style.color = '#e5484d';
+      statusMsg.textContent = friendlyError(err.code);
+    }
   });
 
   const savedTheme = localStorage.getItem('cubyTheme');
