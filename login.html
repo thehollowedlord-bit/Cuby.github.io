@@ -216,6 +216,7 @@
       }
       statusMsg.style.color = 'var(--green)';
       statusMsg.textContent = 'Welcome back, ' + (cred.user.displayName || 'Player') + '!';
+      setTimeout(()=>{ location.href = 'index.html' + location.search; }, 1200);
     }catch(err){
       statusMsg.style.color = '#e5484d';
       statusMsg.textContent = friendlyError(err.code);

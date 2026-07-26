@@ -235,5 +235,43 @@
   updateNavLinks();
 </script>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
+    authDomain: "cuby-48249.firebaseapp.com",
+    projectId: "cuby-48249",
+    storageBucket: "cuby-48249.firebasestorage.app",
+    messagingSenderId: "204506566879",
+    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const footer = document.querySelector('.sidebar-footer');
+  const nameEl = footer.querySelector('.name');
+  const subEl = footer.querySelector('.sub');
+  const loggedOutHref = footer.getAttribute('href');
+
+  onAuthStateChanged(auth, (user)=>{
+    if(user && user.emailVerified){
+      nameEl.textContent = user.displayName || 'Player';
+      subEl.textContent = 'Log out';
+      footer.setAttribute('href', '#');
+      footer.onclick = (e)=>{
+        e.preventDefault();
+        signOut(auth);
+      };
+    } else {
+      nameEl.textContent = 'Guest';
+      subEl.textContent = 'Log in / Sign up';
+      footer.setAttribute('href', loggedOutHref);
+      footer.onclick = null;
+    }
+  });
+</script>
+
 </body>
 </html>
