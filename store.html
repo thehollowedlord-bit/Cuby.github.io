@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="icon.png">
+<title>Store — Cuby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .store-tabs{ display:flex; gap:0.6rem; margin-bottom:1.6rem; flex-wrap:wrap; }
+  .store-tab{
+    padding:0.6rem 1.1rem; border-radius:20px; font-weight:800; font-size:0.85rem;
+    background:var(--panel); border:1px solid var(--edge); color:var(--muted); cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .store-tab.active{ background:var(--primary); color:#fff; border-color:transparent; }
+
+  .product-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:1.2rem; }
+  .product-card{
+    background:var(--panel); border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:10px;
+    padding:1.3rem; display:flex; flex-direction:column; gap:0.7rem;
+    box-shadow:0 20px 40px -26px rgba(0,0,0,0.6);
+  }
+  .product-icon{
+    width:100%; height:110px; border-radius:8px;
+    background:linear-gradient(135deg, var(--primary), #3a2a8a);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .product-icon img{ max-width:70%; max-height:70%; object-fit:contain; }
+  .product-card h3{ font-size:1.05rem; }
+  .product-card p{ color:var(--muted); font-size:0.82rem; line-height:1.5; flex:1; }
+  .product-price{ font-weight:800; color:var(--gold); font-size:1rem; }
+  .product-card .btn{ width:100%; text-align:center; font-size:0.85rem; padding:0.65rem; }
+
+  .cubes-balance{
+    display:flex; align-items:center; gap:0.5rem; background:var(--panel-2); border:1px solid var(--edge);
+    border-radius:20px; padding:0.5rem 1rem; font-weight:800; font-size:0.9rem; margin-bottom:1.6rem; width:fit-content;
+  }
+  .empty-state{ color:var(--muted); font-size:0.9rem; padding:1.5rem 0; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo"><svg class="cube" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+  <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>Cuby</div>
+  <div class="nav-group">
+    <div class="nav-label">Play</div>
+    <a class="nav-item" href="index.html"><span class="ic">🏠</span>Home</a>
+    <a class="nav-item" href="games.html"><span class="ic">🎮</span>Games</a>
+    <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
+    <a class="nav-item active" href="store.html"><span class="ic">🛒</span>Store</a>
+    <a class="nav-item" href="settings.html"><span class="ic">⚙️</span>Settings</a>
+  </div>
+  <a href="login.html" class="sidebar-footer">
+    <span class="av"></span>
+    <div><div class="name">Guest</div><div class="sub">Log in / Sign up</div></div>
+  </a>
+</aside>
+
+<div class="main">
+  <div class="content">
+    <div class="page-head">
+      <span class="eyebrow">Store</span>
+      <h1>Cubes, gamepasses & gear</h1>
+      <p>Support Cuby and grab something for your character.</p>
+    </div>
+
+    <div class="cubes-balance" id="cubesBalance" style="display:none;">
+      <span class="dot gold" style="width:10px;height:10px;border-radius:50%;background:var(--gold);"></span>
+      <span id="cubesCount">0</span> Cubes
+    </div>
+
+    <div class="store-tabs">
+      <div class="store-tab active" data-category="cubes">Cube Packs</div>
+      <div class="store-tab" data-category="gamepass">Gamepasses</div>
+      <div class="store-tab" data-category="item">Shirts & UGC</div>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <p class="empty-state">Loading store...</p>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
+</div>
+
+<script src="shared.js"></script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-functions.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
+    authDomain: "cuby-48249.firebaseapp.com",
+    projectId: "cuby-48249",
+    storageBucket: "cuby-48249.firebasestorage.app",
+    messagingSenderId: "204506566879",
+    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
+  };
+  const app = initializeApp(firebaseConfig, "storeApp");
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const functions = getFunctions(app);
+  const createCheckoutSession = httpsCallable(functions, "createCheckoutSession");
+
+  const productGrid = document.getElementById("productGrid");
+  const tabs = document.querySelectorAll(".store-tab");
+  const cubesBalance = document.getElementById("cubesBalance");
+  const cubesCount = document.getElementById("cubesCount");
+
+  let currentUser = null;
+  let allProducts = [];
+  let currentCategory = "cubes";
+
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = (user && user.emailVerified) ? user : null;
+    if (currentUser) {
+      const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+      const balance = userSnap.exists() ? (userSnap.data().cubes || 0) : 0;
+      cubesCount.textContent = balance;
+      cubesBalance.style.display = "flex";
+    } else {
+      cubesBalance.style.display = "none";
+    }
+  });
+
+  async function loadProducts() {
+    const q = query(collection(db, "products"), where("active", "==", true));
+    const snap = await getDocs(q);
+    allProducts = [];
+    snap.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const items = allProducts.filter(p => p.type === currentCategory);
+    if (items.length === 0) {
+      productGrid.innerHTML = '<p class="empty-state">Nothing here yet — check back soon.</p>';
+      return;
+    }
+    productGrid.innerHTML = "";
+    items.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      const priceDisplay = "$" + (product.priceUSD / 100).toFixed(2);
+      card.innerHTML = `
+        <div class="product-icon">${product.iconUrl ? `<img src="${product.iconUrl}" alt="${product.name}">` : ""}</div>
+        <h3>${product.name}</h3>
+        <p>${product.description || ""}</p>
+        <div class="product-price">${priceDisplay}</div>
+        <button class="btn btn-primary buy-btn">Buy</button>
+      `;
+      card.querySelector(".buy-btn").addEventListener("click", () => buyProduct(product.id, card.querySelector(".buy-btn")));
+      productGrid.appendChild(card);
+    });
+  }
+
+  async function buyProduct(productId, btn) {
+    if (!currentUser) {
+      location.href = "login.html";
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Redirecting...";
+    try {
+      const result = await createCheckoutSession({ productId });
+      location.href = result.data.url;
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = "Buy";
+      alert("Something went wrong starting checkout. Please try again.");
+    }
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentCategory = tab.dataset.category;
+      renderProducts();
+    });
+  });
+
+  loadProducts();
+</script>
+
+<script type="module" src="shared-auth.js"></script>
+
+</body>
+</html>

@@ -7,53 +7,9 @@
 <title>Settings — Cuby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root{
-    --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
-    --ink: #ece9f7; --muted: #8b85a3; --primary: #7c5cff; --primary-deep: #5b3ddb;
-    --gold: #f5b94d; --green: #4fd18a;
-  }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
-  [data-mode="light"]{
-    --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
-    --ink:#20242c; --muted:#6b7280;
-  }
-  [data-mode="light"] .content::before{ opacity:0.08; }
-  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; display:flex; min-height:100vh; }
-  a{ color:inherit; text-decoration:none; }
-  h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
-  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
-
-  .sidebar{ width:220px; background:var(--panel); border-right:1px solid var(--edge); padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem; position:sticky; top:0; height:100vh; }
-  .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
-  .logo .cube{ width:28px; height:28px; border-radius:8px; background:linear-gradient(150deg, var(--primary), var(--primary-deep)); box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); animation:pulse-glow 3s ease-in-out infinite; }
-  @keyframes pulse-glow{ 0%,100%{ box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); } 50%{ box-shadow:0 4px 18px rgba(124,92,255,0.6), 0 0 0 7px rgba(124,92,255,0.05); } }
-  .nav-group{ display:flex; flex-direction:column; gap:0.2rem; }
-  .nav-label{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 0.7rem; margin-bottom:0.4rem; }
-  .nav-item{ display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.7rem; border-radius:10px; font-weight:700; font-size:0.9rem; color:var(--muted); transition:background .15s, color .15s; }
-  .nav-item .ic{ font-size:1.05rem; width:20px; text-align:center; flex-shrink:0; filter:grayscale(1) opacity(0.65); transition:filter .15s; }
-  .nav-item:hover{ background:var(--panel-2); color:var(--ink); }
-  .nav-item.active{ background:linear-gradient(90deg, rgba(124,92,255,0.18), transparent); color:var(--ink); border:1px solid var(--edge); }
-  .nav-item.active .ic{ filter:none; }
-  .sidebar-footer{ margin-top:auto; display:flex; align-items:center; gap:0.7rem; padding:0.7rem; border-radius:10px; background:var(--panel-2); border:1px solid var(--edge); }
-  .sidebar-footer .av{ width:34px; height:34px; border-radius:50%; background:linear-gradient(150deg,var(--primary),var(--primary-deep)); flex-shrink:0; }
-  .sidebar-footer .name{ font-weight:800; font-size:0.85rem; }
-  .sidebar-footer .sub{ font-size:0.72rem; color:var(--muted); }
-
-  .main{ flex:1; }
-  .content{ padding:2.4rem 1.8rem 4rem; max-width:760px; position:relative; }
-  .content::before{ content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; background:radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity:0.16; filter:blur(50px); pointer-events:none; z-index:0; }
-  .content > *{ position:relative; z-index:1; }
-  .page-head{ margin-bottom:2rem; }
-  .page-head .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.05em; text-transform:uppercase; }
-  .page-head h1{ font-size:2rem; margin-top:0.4rem; }
-
-  .settings-block{ background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:1.8rem; border:3px solid var(--edge); box-shadow:0 24px 50px -28px rgba(0,0,0,0.6); }
+  .settings-block{ background:var(--panel); border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:1.8rem; box-shadow:0 24px 50px -28px rgba(0,0,0,0.6); }
   .settings-block h3{ font-size:1.1rem; margin-bottom:0.4rem; }
   .settings-block > p{ color:var(--muted); font-size:0.85rem; margin-bottom:1.4rem; }
 
@@ -70,17 +26,7 @@
   }
   .theme-name{ font-weight:700; font-size:0.82rem; }
 
-  .btn{
-    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem;
-    padding:0.8rem 1.5rem; border-radius:6px; display:inline-block; transition:transform .1s;
-    border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); cursor:pointer;
-  }
-  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; }
-  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
-  .btn-primary:disabled{ opacity:0.75; cursor:default; transform:none; }
   .btn-primary.saved{ background:linear-gradient(150deg,var(--green),#2f9e64); }
-
-  footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
 </style>
 </head>
 <body>
@@ -98,9 +44,10 @@
     <a class="nav-item" href="index.html"><span class="ic">🏠</span>Home</a>
     <a class="nav-item" href="games.html"><span class="ic">🎮</span>Games</a>
     <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
+    <a class="nav-item" href="store.html"><span class="ic">🛒</span>Store</a>
     <a class="nav-item active" href="settings.html"><span class="ic">⚙️</span>Settings</a>
   </div>
-  <a href="login.html" class="sidebar-footer" style="text-decoration:none;">
+  <a href="login.html" class="sidebar-footer">
     <span class="av"></span>
     <div><div class="name">Guest</div><div class="sub">Log in / Sign up</div></div>
   </a>
@@ -148,23 +95,17 @@
       </div>
     </div>
 
-    <button class="btn btn-primary" id="saveBtn" style="width:100%; margin-top:1.4rem; cursor:pointer; font-size:0.9rem;">Save Settings</button>
+    <button class="btn btn-primary" id="saveBtn" style="width:100%; margin-top:1.4rem; font-size:0.9rem;">Save Settings</button>
     <p id="saveMsg" style="text-align:center; font-size:0.8rem; color:var(--muted); margin-top:0.6rem;"></p>
   </div>
 
   <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 </div>
 
+<script src="shared.js"></script>
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  const savedTheme = localStorage.getItem('cubyTheme');
-  const savedMode = localStorage.getItem('cubyMode');
-  const params = new URLSearchParams(location.search);
-  let currentTheme = savedTheme || params.get('theme') || 'indigo';
-  let currentMode = savedMode || params.get('mode') || 'dark';
-  if(currentTheme !== 'indigo') document.documentElement.setAttribute('data-theme', currentTheme);
-  if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
+  let currentTheme = window.cubyTheme;
+  let currentMode = window.cubyMode;
 
   const themeOptions = document.querySelectorAll('.theme-option[data-theme-value]');
   const modeOptions = document.querySelectorAll('.theme-option[data-mode-value]');
@@ -183,10 +124,11 @@
   themeOptions.forEach(opt=>{
     opt.addEventListener('click', ()=>{
       currentTheme = opt.dataset.themeValue;
+      window.cubyTheme = currentTheme;
       if(currentTheme === 'indigo') document.documentElement.removeAttribute('data-theme');
       else document.documentElement.setAttribute('data-theme', currentTheme);
       markSelected();
-      updateNavLinks();
+      window.cubyUpdateNavLinks();
       saveMsg.textContent = '';
     });
   });
@@ -194,10 +136,11 @@
   modeOptions.forEach(opt=>{
     opt.addEventListener('click', ()=>{
       currentMode = opt.dataset.modeValue;
+      window.cubyMode = currentMode;
       if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
       else document.documentElement.removeAttribute('data-mode');
       markSelected();
-      updateNavLinks();
+      window.cubyUpdateNavLinks();
       saveMsg.textContent = '';
     });
   });
@@ -222,56 +165,9 @@
       saveMsg.style.color = '#e5484d';
     }
   });
-
-  function updateNavLinks(){
-    document.querySelectorAll('a[href$=".html"]').forEach(a=>{
-      const base = a.getAttribute('href').split('?')[0];
-      const qs = [];
-      if(currentTheme !== 'indigo') qs.push('theme=' + currentTheme);
-      if(currentMode === 'light') qs.push('mode=light');
-      a.href = qs.length ? base + '?' + qs.join('&') : base;
-    });
-  }
-  updateNavLinks();
 </script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
-    authDomain: "cuby-48249.firebaseapp.com",
-    projectId: "cuby-48249",
-    storageBucket: "cuby-48249.firebasestorage.app",
-    messagingSenderId: "204506566879",
-    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
-  };
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const footer = document.querySelector('.sidebar-footer');
-  const nameEl = footer.querySelector('.name');
-  const subEl = footer.querySelector('.sub');
-  const loggedOutHref = footer.getAttribute('href');
-
-  onAuthStateChanged(auth, (user)=>{
-    if(user && user.emailVerified){
-      nameEl.textContent = user.displayName || 'Player';
-      subEl.textContent = 'Log out';
-      footer.setAttribute('href', '#');
-      footer.onclick = (e)=>{
-        e.preventDefault();
-        signOut(auth);
-      };
-    } else {
-      nameEl.textContent = 'Guest';
-      subEl.textContent = 'Log in / Sign up';
-      footer.setAttribute('href', loggedOutHref);
-      footer.onclick = null;
-    }
-  });
-</script>
+<script type="module" src="shared-auth.js"></script>
 
 </body>
 </html>

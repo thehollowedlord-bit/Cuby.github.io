@@ -7,77 +7,8 @@
 <title>Cuby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root{
-    --bg: #0d0b14;
-    --panel: #171320;
-    --panel-2: #1d1829;
-    --edge: #2a2438;
-    --ink: #ece9f7;
-    --muted: #8b85a3;
-    --primary: #7c5cff;
-    --primary-deep: #5b3ddb;
-    --gold: #f5b94d;
-    --green: #4fd18a;
-  }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
-  [data-mode="light"]{
-    --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
-    --ink:#20242c; --muted:#6b7280;
-  }
-  [data-mode="light"] .content::before{ opacity:0.08; }
-  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
-
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{
-    background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif;
-    display:flex; min-height:100vh;
-  }
-  a{ color:inherit; text-decoration:none; }
-  h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
-  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
-  ::selection{ background:var(--primary); color:#fff; }
-  :focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
-
-  .sidebar{
-    width:220px; background:var(--panel); border-right:1px solid var(--edge);
-    padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem;
-    position:sticky; top:0; height:100vh;
-  }
-  .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
-  .logo .cube{
-    width:28px; height:28px; border-radius:5px;
-    background:linear-gradient(150deg, var(--primary), var(--primary-deep));
-    box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08);
-    animation:pulse-glow 3s ease-in-out infinite;
-  }
-  @keyframes pulse-glow{
-    0%,100%{ box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); }
-    50%{ box-shadow:0 4px 18px rgba(124,92,255,0.6), 0 0 0 7px rgba(124,92,255,0.05); }
-  }
-  .nav-group{ display:flex; flex-direction:column; gap:0.2rem; }
-  .nav-label{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 0.7rem; margin-bottom:0.4rem; }
-  .nav-item{
-    display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.7rem; border-radius:5px;
-    font-weight:700; font-size:0.9rem; color:var(--muted); transition:background .15s, color .15s;
-  }
-  .nav-item .ic{ font-size:1.05rem; width:20px; text-align:center; flex-shrink:0; filter:grayscale(1) opacity(0.65); transition:filter .15s; }
-  .nav-item:hover{ background:var(--panel-2); color:var(--ink); }
-  .nav-item.active{ background:linear-gradient(90deg, rgba(124,92,255,0.18), transparent); color:var(--ink); border:1px solid var(--edge); }
-  .nav-item.active .ic{ filter:none; }
-
-  .sidebar-footer{
-    margin-top:auto; display:flex; align-items:center; gap:0.7rem;
-    padding:0.7rem; border-radius:10px; background:var(--panel-2); border:1px solid var(--edge);
-  }
-  .sidebar-footer .av{ width:34px; height:34px; border-radius:50%; background:linear-gradient(150deg,var(--primary),var(--primary-deep)); flex-shrink:0; }
-  .sidebar-footer .name{ font-weight:800; font-size:0.85rem; }
-  .sidebar-footer .sub{ font-size:0.72rem; color:var(--muted); }
-
-  .main{ flex:1; display:flex; flex-direction:column; }
   .topbar{
     display:flex; align-items:center; gap:1rem; padding:1rem 1.8rem;
     border-bottom:1px solid var(--edge);
@@ -95,13 +26,9 @@
   .dot.gold{ background:var(--gold); }
   .dot.green{ background:var(--green); }
 
-  .content{ padding:2rem 1.8rem 4rem; max-width:1100px; position:relative; }
-  .content::before{ content:''; position:absolute; top:-60px; right:-100px; width:340px; height:340px; background:radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity:0.16; filter:blur(50px); pointer-events:none; z-index:0; }
-  .content > *{ position:relative; z-index:1; }
-
   .hero{
     background:linear-gradient(120deg, rgba(124,92,255,0.16), transparent 70%), var(--panel);
-    border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:2.2rem; border:3px solid var(--edge);
+    border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:2.2rem;
     box-shadow:0 24px 50px -28px rgba(0,0,0,0.6);
     display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap;
     margin-bottom:2.4rem;
@@ -109,41 +36,8 @@
   .hero-text .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.06em; text-transform:uppercase; }
   .hero-text h1{ font-size:2.2rem; margin:0.5rem 0 0.6rem; }
   .hero-text p{ color:var(--muted); max-width:420px; line-height:1.6; margin-bottom:1.3rem; }
-  .btn{
-    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem;
-    padding:0.8rem 1.5rem; border-radius:6px; display:inline-block; transition:transform .1s; border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35);
-  }
-  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; box-shadow:0 6px 18px rgba(124,92,255,0.35); }
-  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
-  .btn-ghost{ border:1px solid var(--edge); color:var(--ink); margin-left:0.7rem; }
-  .btn-ghost:hover{ border-color:var(--primary); color:var(--primary); }
 
   .mascot-box{ width:150px; height:170px; position:relative; flex-shrink:0; }
-  .m-head{ width:56px; height:50px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
-  .m-face{ position:absolute; top:20px; left:50%; transform:translateX(-50%); display:flex; gap:13px; }
-  .m-eye{ width:5px; height:9px; background:#0d0b14; border-radius:2px; }
-  .m-smile{ position:absolute; top:32px; left:50%; transform:translateX(-50%); width:22px; height:10px; border-bottom:3px solid #0d0b14; border-radius:0 0 12px 12px; }
-  .m-torso{ width:70px; height:58px; background:var(--primary); border:3px solid #0d0b14; border-radius:6px; position:absolute; top:58px; left:50%; transform:translateX(-50%); z-index:1; }
-  .m-arm{ width:16px; height:56px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; }
-  .m-arm.left{ top:28px; left:14px; transform:rotate(55deg); transform-origin:top center; }
-  .m-arm.right{ top:28px; right:14px; transform:rotate(-55deg); transform-origin:top center; }
-  .m-leg{ width:20px; height:46px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:112px; }
-  .m-leg.left{ left:38px; }
-  .m-leg.right{ right:38px; }
-  .mascot-mini{ transform:scale(0.55); }
-
-  .thumb-carousel{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:9px; background:linear-gradient(135deg, var(--primary), #3a2a8a); }
-  .thumb-img{ width:100%; height:100%; object-fit:contain; display:block; }
-  .thumb-nav{
-    position:absolute; top:50%; transform:translateY(-50%);
-    background:rgba(0,0,0,0.55); border:2px solid #000; color:#fff;
-    width:28px; height:28px; border-radius:5px; cursor:pointer;
-    font-weight:800; font-size:1rem; display:flex; align-items:center; justify-content:center;
-    transition:background .15s;
-  }
-  .thumb-nav:hover{ background:rgba(0,0,0,0.8); }
-  .thumb-nav.prev{ left:8px; }
-  .thumb-nav.next{ right:8px; }
 
   .section-head{ margin-bottom:1.1rem; }
   .section-head .eyebrow{ font-size:0.78rem; color:var(--muted); font-weight:800; }
@@ -164,13 +58,6 @@
   .game-info h3{ font-size:1.2rem; margin-bottom:0.3rem; }
   .game-info p{ color:var(--muted); font-size:0.85rem; margin-bottom:0.6rem; }
   .game-stats{ display:flex; gap:1rem; font-size:0.8rem; color:var(--muted); font-weight:700; }
-
-  footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
-
-  @media (max-width: 760px){
-    .sidebar{ display:none; }
-    .search{ display:none; }
-  }
 </style>
 </head>
 <body>
@@ -188,15 +75,13 @@
     <a class="nav-item active" href="index.html"><span class="ic">🏠</span>Home</a>
     <a class="nav-item" href="games.html"><span class="ic">🎮</span>Games</a>
     <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
+    <a class="nav-item" href="store.html"><span class="ic">🛒</span>Store</a>
     <a class="nav-item" href="settings.html"><span class="ic">⚙️</span>Settings</a>
   </div>
-  <div class="sidebar-footer">
+  <a href="login.html" class="sidebar-footer">
     <span class="av"></span>
-    <div>
-      <div class="name">Guest</div>
-      <div class="sub">Not signed in</div>
-    </div>
-  </div>
+    <div><div class="name">Guest</div><div class="sub">Not signed in</div></div>
+  </a>
 </aside>
 
 <div class="main">
@@ -246,23 +131,8 @@
   <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 </div>
 
+<script src="shared.js"></script>
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  const savedTheme = localStorage.getItem('cubyTheme');
-  const savedMode = localStorage.getItem('cubyMode');
-  const params = new URLSearchParams(location.search);
-  const theme = savedTheme || params.get('theme') || 'indigo';
-  const mode = savedMode || params.get('mode') || 'dark';
-  if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
-  if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
-  document.querySelectorAll('a[href$=".html"]').forEach(a=>{
-    const base = a.getAttribute('href').split('?')[0];
-    const qs = [];
-    if(theme !== 'indigo') qs.push('theme=' + theme);
-    if(mode === 'light') qs.push('mode=light');
-    a.href = qs.length ? base + '?' + qs.join('&') : base;
-  });
-
   const thumbImages = ['cuby.png', 'jump_cuby.png', 'adventure.png'];
   document.querySelectorAll('.thumb-carousel').forEach(carousel=>{
     let idx = 0;
@@ -278,43 +148,7 @@
   });
 </script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
-    authDomain: "cuby-48249.firebaseapp.com",
-    projectId: "cuby-48249",
-    storageBucket: "cuby-48249.firebasestorage.app",
-    messagingSenderId: "204506566879",
-    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
-  };
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const footer = document.querySelector('.sidebar-footer');
-  const nameEl = footer.querySelector('.name');
-  const subEl = footer.querySelector('.sub');
-  const loggedOutHref = footer.getAttribute('href');
-
-  onAuthStateChanged(auth, (user)=>{
-    if(user && user.emailVerified){
-      nameEl.textContent = user.displayName || 'Player';
-      subEl.textContent = 'Log out';
-      footer.setAttribute('href', '#');
-      footer.onclick = (e)=>{
-        e.preventDefault();
-        signOut(auth);
-      };
-    } else {
-      nameEl.textContent = 'Guest';
-      subEl.textContent = 'Log in / Sign up';
-      footer.setAttribute('href', loggedOutHref);
-      footer.onclick = null;
-    }
-  });
-</script>
+<script type="module" src="shared-auth.js"></script>
 
 </body>
 </html>
