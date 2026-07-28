@@ -152,7 +152,8 @@
           <div class="stat"><b>Multiplayer</b>Mode</div>
           <div class="stat"><b>Free</b>To Play</div>
         </div>
-        <a class="btn btn-primary" href="download.html">Play Now</a>
+        <button class="btn btn-primary" id="playNowBtn" style="cursor:pointer;">Play Now</button>
+        <p id="playStatus" style="margin-top:0.8rem; font-size:0.82rem; color:var(--muted);"></p>
       </div>
     </div>
   </div>
@@ -226,6 +227,71 @@
       subEl.textContent = 'Log in / Sign up';
       footer.setAttribute('href', loggedOutHref);
       footer.onclick = null;
+    }
+  });
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged as onAuthState2 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig2 = {
+    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
+    authDomain: "cuby-48249.firebaseapp.com",
+    projectId: "cuby-48249",
+    storageBucket: "cuby-48249.firebasestorage.app",
+    messagingSenderId: "204506566879",
+    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
+  };
+  const app2 = initializeApp(firebaseConfig2, "playApp");
+  const auth2 = getAuth(app2);
+  const db = getFirestore(app2);
+
+  const playBtn = document.getElementById('playNowBtn');
+  const playStatus = document.getElementById('playStatus');
+  let currentUser = null;
+
+  onAuthState2(auth2, (user)=>{
+    currentUser = (user && user.emailVerified) ? user : null;
+  });
+
+  function randomCode(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for(let i=0; i<8; i++) code += chars[Math.floor(Math.random()*chars.length)];
+    return code;
+  }
+
+  playBtn.addEventListener('click', async ()=>{
+    if(!currentUser){
+      location.href = 'login.html';
+      return;
+    }
+
+    playBtn.disabled = true;
+    playStatus.textContent = 'Preparing your session...';
+
+    try{
+      const code = randomCode();
+      await setDoc(doc(db, 'launchCodes', code), {
+        uid: currentUser.uid,
+        username: currentUser.displayName || 'Player',
+        email: currentUser.email,
+        createdAt: serverTimestamp()
+      });
+
+      playStatus.textContent = 'Opening Cuby...';
+      location.href = 'cuby://login?code=' + code;
+
+      setTimeout(()=>{
+        playStatus.textContent = "Didn't open? Make sure Cuby is installed, then try again.";
+        playBtn.disabled = false;
+      }, 3000);
+    }catch(err){
+      console.error(err);
+      playStatus.textContent = 'Something went wrong. Please try again.';
+      playBtn.disabled = false;
     }
   });
 </script>
