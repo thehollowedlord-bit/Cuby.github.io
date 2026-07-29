@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="icon.png">
 <title>Cuby</title>
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -15,151 +15,102 @@
     --edge: #2a2438;
     --ink: #ece9f7;
     --muted: #8b85a3;
-    --primary: #7c5cff;
-    --primary-deep: #5b3ddb;
+    --primary: #37b673;
+    --primary-deep: #1f8a54;
     --gold: #f5b94d;
     --green: #4fd18a;
   }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+
+
+
   [data-mode="light"]{
     --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
     --ink:#20242c; --muted:#6b7280;
   }
-  [data-mode="light"] .content::before{ opacity:0.08; }
-  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
-
   *{ box-sizing:border-box; margin:0; padding:0; }
-  body{
-    background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif;
-    display:flex; min-height:100vh;
-  }
+  body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; }
   a{ color:inherit; text-decoration:none; }
   h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
-  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
+  h1, .logo, .game-info h3{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
   ::selection{ background:var(--primary); color:#fff; }
   :focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
 
-  .sidebar{
-    width:220px; background:var(--panel); border-right:1px solid var(--edge);
-    padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem;
-    position:sticky; top:0; height:100vh;
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9rem 1.6rem; background:var(--panel); border-bottom:3px solid #000;
+    position:sticky; top:0; z-index:20; flex-wrap:wrap; gap:1rem;
   }
-  .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
-  .logo .cube{
-    width:28px; height:28px; border-radius:5px;
-    background:linear-gradient(150deg, var(--primary), var(--primary-deep));
-    box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08);
-    animation:pulse-glow 3s ease-in-out infinite;
-  }
-  @keyframes pulse-glow{
-    0%,100%{ box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); }
-    50%{ box-shadow:0 4px 18px rgba(124,92,255,0.6), 0 0 0 7px rgba(124,92,255,0.05); }
-  }
-  .nav-group{ display:flex; flex-direction:column; gap:0.2rem; }
-  .nav-label{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 0.7rem; margin-bottom:0.4rem; }
-  .nav-item{
-    display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.7rem; border-radius:5px;
-    font-weight:700; font-size:0.9rem; color:var(--muted); transition:background .15s, color .15s;
-  }
-  .nav-item .ic{ font-size:1.05rem; width:20px; text-align:center; flex-shrink:0; filter:grayscale(1) opacity(0.65); transition:filter .15s; }
-  .nav-item:hover{ background:var(--panel-2); color:var(--ink); }
-  .nav-item.active{ background:linear-gradient(90deg, rgba(124,92,255,0.18), transparent); color:var(--ink); border:1px solid var(--edge); }
-  .nav-item.active .ic{ filter:none; }
+  .topnav-left{ display:flex; align-items:center; gap:2rem; }
+  .logo{ display:flex; align-items:center; gap:0.5rem; font-size:1.3rem; }
+  .logo svg{ width:26px; height:26px; }
+  .topnav-links{ display:flex; gap:1.4rem; font-weight:800; font-size:0.9rem; }
+  .topnav-links a{ color:var(--muted); padding:0.4rem 0; border-bottom:2px solid transparent; transition:color .15s, border-color .15s; }
+  .topnav-links a:hover, .topnav-links a.active{ color:var(--ink); border-color:var(--primary); }
+  .topnav-right{ display:flex; align-items:center; gap:0.7rem; }
 
-  .sidebar-footer{
-    margin-top:auto; display:flex; align-items:center; gap:0.7rem;
-    padding:0.7rem; border-radius:10px; background:var(--panel-2); border:1px solid var(--edge);
+  .btn{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.85rem;
+    padding:0.6rem 1.2rem; border-radius:6px; display:inline-block; cursor:pointer;
+    border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); transition:transform .1s;
   }
-  .sidebar-footer .av{ width:34px; height:34px; border-radius:50%; background:linear-gradient(150deg,var(--primary),var(--primary-deep)); flex-shrink:0; }
-  .sidebar-footer .name{ font-weight:800; font-size:0.85rem; }
-  .sidebar-footer .sub{ font-size:0.72rem; color:var(--muted); }
+  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; }
+  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
+  .btn-ghost{ background:var(--panel-2); color:var(--ink); }
+  .btn-ghost:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
 
-  .main{ flex:1; display:flex; flex-direction:column; }
-  .topbar{
-    display:flex; align-items:center; gap:1rem; padding:1rem 1.8rem;
-    border-bottom:1px solid var(--edge);
-  }
-  .search{
-    flex:1; max-width:420px; background:var(--panel); border:1px solid var(--edge); border-radius:5px;
-    padding:0.6rem 1.1rem; font-size:0.85rem; color:var(--muted);
-  }
-  .top-right{ display:flex; align-items:center; gap:0.7rem; margin-left:auto; }
   .pill{
-    display:flex; align-items:center; gap:0.4rem; background:var(--panel); border:1px solid var(--edge);
-    border-radius:20px; padding:0.4rem 0.85rem; font-weight:800; font-size:0.85rem;
+    display:flex; align-items:center; gap:0.4rem; background:var(--panel-2); border:2px solid var(--edge);
+    border-radius:6px; padding:0.4rem 0.8rem; font-weight:800; font-size:0.82rem;
   }
   .dot{ width:9px; height:9px; border-radius:50%; }
   .dot.gold{ background:var(--gold); }
-  .dot.green{ background:var(--green); }
 
-  .content{ padding:2rem 1.8rem 4rem; max-width:1100px; position:relative; }
-  .content::before{ content:''; position:absolute; top:-60px; right:-100px; width:340px; height:340px; background:radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity:0.16; filter:blur(50px); pointer-events:none; z-index:0; }
-  .content > *{ position:relative; z-index:1; }
+  .promo-banner{
+    background:linear-gradient(90deg, var(--primary-deep), var(--primary));
+    color:#fff; padding:0.6rem 1.6rem; display:flex; justify-content:center; gap:0.6rem;
+    align-items:center; font-size:0.85rem; font-weight:700; text-align:center;
+  }
+  .promo-banner a{ text-decoration:underline; }
+
+  .page-wrap{ max-width:1200px; margin:0 auto; padding:2.4rem 1.6rem 4rem; }
 
   .hero{
-    background:linear-gradient(120deg, rgba(124,92,255,0.16), transparent 70%), var(--panel);
-    border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:2.2rem; border:3px solid var(--edge);
-    box-shadow:0 24px 50px -28px rgba(0,0,0,0.6);
+    background:linear-gradient(120deg, rgba(55,182,115,0.16), transparent 70%), var(--panel);
+    border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; padding:2.2rem;
     display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap;
-    margin-bottom:2.4rem;
+    margin-bottom:2.4rem; box-shadow:6px 6px 0 rgba(0,0,0,0.25);
   }
   .hero-text .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.06em; text-transform:uppercase; }
   .hero-text h1{ font-size:2.2rem; margin:0.5rem 0 0.6rem; }
   .hero-text p{ color:var(--muted); max-width:420px; line-height:1.6; margin-bottom:1.3rem; }
-  .btn{
-    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem;
-    padding:0.8rem 1.5rem; border-radius:6px; display:inline-block; transition:transform .1s; border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35);
+
+  .mascot-box{ width:150px; height:170px; position:relative; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .mascot-box img{ max-width:100%; max-height:100%; object-fit:contain; }
+
+  .section-head{ margin-bottom:1.1rem; display:flex; justify-content:space-between; align-items:baseline; }
+  .section-head .eyebrow{ font-size:0.78rem; color:var(--muted); font-weight:800; }
+  .section-head h2{ font-size:1.4rem; margin-top:0.2rem; }
+
+  .game-card{
+    background:var(--panel); border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px;
+    overflow:hidden; display:flex; gap:1.4rem; padding:1.2rem; align-items:center; flex-wrap:wrap;
+    box-shadow:6px 6px 0 rgba(0,0,0,0.25);
   }
-  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; box-shadow:0 6px 18px rgba(124,92,255,0.35); }
-  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
-  .btn-ghost{ border:1px solid var(--edge); color:var(--ink); margin-left:0.7rem; }
-  .btn-ghost:hover{ border-color:var(--primary); color:var(--primary); }
-
-  .mascot-box{ width:150px; height:170px; position:relative; flex-shrink:0; }
-  .m-head{ width:56px; height:50px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
-  .m-face{ position:absolute; top:20px; left:50%; transform:translateX(-50%); display:flex; gap:13px; }
-  .m-eye{ width:5px; height:9px; background:#0d0b14; border-radius:2px; }
-  .m-smile{ position:absolute; top:32px; left:50%; transform:translateX(-50%); width:22px; height:10px; border-bottom:3px solid #0d0b14; border-radius:0 0 12px 12px; }
-  .m-torso{ width:70px; height:58px; background:var(--primary); border:3px solid #0d0b14; border-radius:6px; position:absolute; top:58px; left:50%; transform:translateX(-50%); z-index:1; }
-  .m-arm{ width:16px; height:56px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; }
-  .m-arm.left{ top:28px; left:14px; transform:rotate(55deg); transform-origin:top center; }
-  .m-arm.right{ top:28px; right:14px; transform:rotate(-55deg); transform-origin:top center; }
-  .m-leg{ width:20px; height:46px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:112px; }
-  .m-leg.left{ left:38px; }
-  .m-leg.right{ right:38px; }
-  .mascot-mini{ transform:scale(0.55); }
-
-  .thumb-carousel{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:9px; background:linear-gradient(135deg, var(--primary), #3a2a8a); }
+  .game-thumb{
+    width:160px; height:100px; border-radius:6px; flex-shrink:0; overflow:hidden;
+    background:linear-gradient(135deg, var(--primary), #1a4d33);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .thumb-carousel{ position:relative; width:100%; height:100%; overflow:hidden; background:linear-gradient(135deg, var(--primary), #1a4d33); }
   .thumb-img{ width:100%; height:100%; object-fit:contain; display:block; }
   .thumb-nav{
     position:absolute; top:50%; transform:translateY(-50%);
     background:rgba(0,0,0,0.55); border:2px solid #000; color:#fff;
     width:28px; height:28px; border-radius:5px; cursor:pointer;
     font-weight:800; font-size:1rem; display:flex; align-items:center; justify-content:center;
-    transition:background .15s;
   }
-  .thumb-nav:hover{ background:rgba(0,0,0,0.8); }
   .thumb-nav.prev{ left:8px; }
   .thumb-nav.next{ right:8px; }
-
-  .section-head{ margin-bottom:1.1rem; }
-  .section-head .eyebrow{ font-size:0.78rem; color:var(--muted); font-weight:800; }
-  .section-head h2{ font-size:1.4rem; margin-top:0.2rem; }
-
-  .game-card{
-    background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:6px; overflow:hidden;
-    display:flex; gap:1.4rem; padding:1.2rem; align-items:center; flex-wrap:wrap;
-    box-shadow:0 20px 40px -26px rgba(0,0,0,0.6); transition:transform .18s;
-  }
-  .game-card:hover{ transform:translateY(-3px); }
-  .game-thumb{
-    width:160px; height:100px; border-radius:12px; flex-shrink:0;
-    background:linear-gradient(135deg, var(--primary), #3a2a8a);
-    display:flex; align-items:center; justify-content:center;
-  }
   .game-info{ flex:1; min-width:180px; }
   .game-info h3{ font-size:1.2rem; margin-bottom:0.3rem; }
   .game-info p{ color:var(--muted); font-size:0.85rem; margin-bottom:0.6rem; }
@@ -168,99 +119,86 @@
   footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
 
   @media (max-width: 760px){
-    .sidebar{ display:none; }
-    .search{ display:none; }
+    .topnav-links{ display:none; }
   }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="logo"><svg class="cube" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-  <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
-  <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
-  <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
-</svg>Cuby</div>
-  <div class="nav-group">
-    <div class="nav-label">Play</div>
-    <a class="nav-item active" href="index.html"><span class="ic">🏠</span>Home</a>
-    <a class="nav-item" href="games.html"><span class="ic">🎮</span>Games</a>
-    <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
-    <a class="nav-item" href="settings.html"><span class="ic">⚙️</span>Settings</a>
+<header class="topnav">
+  <div class="topnav-left">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      </svg>
+      Cuby
+    </a>
+    <nav class="topnav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="games.html">Games</a>
+      <a href="marketplace.html">Marketplace</a>
+    </nav>
   </div>
-  <div class="sidebar-footer">
-    <span class="av"></span>
+  <div class="topnav-right" id="authArea">
+    <a href="login.html" class="btn btn-ghost">Sign In</a>
+    <a href="login.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</header>
+
+<div class="promo-banner">📣 Cuby is in early development — <a href="download.html">play the first world now</a></div>
+
+<main class="page-wrap">
+  <div class="hero">
+    <div class="hero-text">
+      <span class="eyebrow">Welcome to Cuby</span>
+      <h1>Build. Play. Have Fun.</h1>
+      <p>A blocky world where you play as Cuby — right now there's one world to explore, with more on the way.</p>
+      <a class="btn btn-primary" href="games.html">Play Cuby</a>
+      <a class="btn btn-ghost" href="download.html">Download</a>
+    </div>
+    <div class="mascot-box">
+      <img src="welcome.png" alt="Cuby waving">
+    </div>
+  </div>
+
+  <div class="section-head">
     <div>
-      <div class="name">Guest</div>
-      <div class="sub">Not signed in</div>
-    </div>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <input class="search" placeholder="Search Cuby..." />
-    <div class="top-right">
-      <span class="pill"><span class="dot gold"></span>0 Cubes</span>
-      <span class="pill"><span class="dot green"></span>Online</span>
-    </div>
-  </div>
-
-  <div class="content">
-    <div class="hero">
-      <div class="hero-text">
-        <span class="eyebrow">Welcome to Cuby</span>
-        <h1>Build. Play. Have Fun.</h1>
-        <p>A blocky world where you play as Cuby — right now there's one world to explore, with more on the way.</p>
-        <a class="btn btn-primary" href="games.html">Play Cuby</a>
-        <a class="btn btn-ghost" href="download.html">Download</a>
-      </div>
-      <div class="mascot-box" style="display:flex; align-items:center; justify-content:center;">
-        <img src="welcome.png" alt="Cuby waving" style="max-width:100%; max-height:100%; object-fit:contain;">
-      </div>
-    </div>
-
-    <div class="section-head">
       <span class="eyebrow">Featured</span>
       <h2>Now Playable</h2>
     </div>
-    <div class="game-card">
-      <div class="game-thumb" style="padding:0;">
-        <div class="thumb-carousel">
-          <img class="thumb-img" src="cuby.png" alt="Cuby game thumbnail">
-          <button class="thumb-nav prev" aria-label="Previous thumbnail">‹</button>
-          <button class="thumb-nav next" aria-label="Next thumbnail">›</button>
-        </div>
-      </div>
-      <div class="game-info">
-        <h3>Cuby</h3>
-        <p>The very first Cuby world — move, jump, sprint, and chat with other players.</p>
-        <div class="game-stats"><span>👤 Multiplayer</span><span>🟢 Live</span></div>
-      </div>
-      <a class="btn btn-primary" href="games.html">Play</a>
-    </div>
   </div>
+  <div class="game-card">
+    <div class="game-thumb" style="padding:0;">
+      <div class="thumb-carousel">
+        <img class="thumb-img" src="cuby.png" alt="Cuby game thumbnail">
+        <button class="thumb-nav prev" aria-label="Previous thumbnail">‹</button>
+        <button class="thumb-nav next" aria-label="Next thumbnail">›</button>
+      </div>
+    </div>
+    <div class="game-info">
+      <h3>Cuby</h3>
+      <p>The very first Cuby world — move, jump, sprint, and chat with other players.</p>
+      <div class="game-stats"><span>👤 Multiplayer</span><span>🟢 Live</span></div>
+    </div>
+    <a class="btn btn-primary" href="games.html">Play</a>
+  </div>
+</main>
 
-  <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
-</div>
+<footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-  const savedTheme = localStorage.getItem('cubyTheme');
   const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  const theme = savedTheme || params.get('theme') || 'indigo';
   const mode = savedMode || params.get('mode') || 'dark';
-  if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
   if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
   document.querySelectorAll('a[href$=".html"]').forEach(a=>{
     const base = a.getAttribute('href').split('?')[0];
-    const qs = [];
-    if(theme !== 'indigo') qs.push('theme=' + theme);
-    if(mode === 'light') qs.push('mode=light');
-    a.href = qs.length ? base + '?' + qs.join('&') : base;
+    a.href = mode === 'light' ? base + '?mode=light' : base;
   });
 
   const thumbImages = ['cuby.png', 'jump_cuby.png', 'adventure.png'];
@@ -292,26 +230,15 @@
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
-  const footer = document.querySelector('.sidebar-footer');
-  const nameEl = footer.querySelector('.name');
-  const subEl = footer.querySelector('.sub');
-  const loggedOutHref = footer.getAttribute('href');
+  const authArea = document.getElementById('authArea');
 
   onAuthStateChanged(auth, (user)=>{
     if(user && user.emailVerified){
-      nameEl.textContent = user.displayName || 'Player';
-      subEl.textContent = 'Log out';
-      footer.setAttribute('href', '#');
-      footer.onclick = (e)=>{
-        e.preventDefault();
-        signOut(auth);
-      };
-    } else {
-      nameEl.textContent = 'Guest';
-      subEl.textContent = 'Log in / Sign up';
-      footer.setAttribute('href', loggedOutHref);
-      footer.onclick = null;
+      authArea.innerHTML = `
+        <span class="pill"><span class="dot gold"></span>0 Cubes</span>
+        <span class="pill" style="cursor:pointer;" id="logoutPill">${user.displayName || 'Player'} — Log out</span>
+      `;
+      document.getElementById('logoutPill').addEventListener('click', ()=>signOut(auth));
     }
   });
 </script>

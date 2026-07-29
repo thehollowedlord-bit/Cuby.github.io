@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketplace — Cuby</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
+    --ink: #ece9f7; --muted: #8b85a3; --primary: #37b673; --primary-deep: #1f8a54;
+    --gold: #f5b94d; --green: #4fd18a; --danger: #e5484d;
+  }
+
+
+
+  [data-mode="light"]{
+    --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
+    --ink:#20242c; --muted:#6b7280;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
+  h1, .logo, .item-card h3{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
+
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9rem 1.6rem; background:var(--panel); border-bottom:3px solid #000;
+    position:sticky; top:0; z-index:20; flex-wrap:wrap; gap:1rem;
+  }
+  .topnav-left{ display:flex; align-items:center; gap:2rem; }
+  .logo{ display:flex; align-items:center; gap:0.5rem; font-size:1.3rem; }
+  .logo svg{ width:26px; height:26px; }
+  .topnav-links{ display:flex; gap:1.4rem; font-weight:800; font-size:0.9rem; }
+  .topnav-links a{ color:var(--muted); padding:0.4rem 0; border-bottom:2px solid transparent; }
+  .topnav-links a:hover, .topnav-links a.active{ color:var(--ink); border-color:var(--primary); }
+  .topnav-right{ display:flex; align-items:center; gap:0.7rem; }
+
+  .btn{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.85rem;
+    padding:0.6rem 1.2rem; border-radius:6px; display:inline-block; cursor:pointer;
+    border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); transition:transform .1s;
+  }
+  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; }
+  .btn-ghost{ background:var(--panel-2); color:var(--ink); }
+
+  .pill{
+    display:flex; align-items:center; gap:0.4rem; background:var(--panel-2); border:2px solid var(--edge);
+    border-radius:6px; padding:0.4rem 0.8rem; font-weight:800; font-size:0.82rem;
+  }
+  .dot{ width:9px; height:9px; border-radius:50%; }
+  .dot.gold{ background:var(--gold); }
+
+  .promo-banner{
+    background:linear-gradient(90deg, var(--primary-deep), var(--primary));
+    color:#fff; padding:0.6rem 1.6rem; display:flex; justify-content:center; gap:0.6rem;
+    align-items:center; font-size:0.85rem; font-weight:700; text-align:center;
+  }
+
+  .page-wrap{ max-width:1200px; margin:0 auto; padding:2.4rem 1.6rem 4rem; }
+  .page-head{ margin-bottom:1.6rem; }
+  .page-head .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.05em; text-transform:uppercase; }
+  .page-head h1{ font-size:2rem; margin-top:0.4rem; }
+
+  .search-row{
+    display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap;
+  }
+  .search-input{
+    flex:1; min-width:220px; background:var(--panel); border:2px solid var(--edge); border-radius:6px;
+    padding:0.7rem 1rem; color:var(--ink); font-family:'Nunito',sans-serif; font-size:0.9rem;
+  }
+  .filter-row{ display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .filter-chip{
+    background:var(--panel-2); border:2px solid var(--edge); border-radius:20px;
+    padding:0.45rem 1rem; font-size:0.8rem; font-weight:700; color:var(--muted); cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  .filter-chip.active{ border-color:var(--primary); color:var(--ink); }
+
+  .item-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(190px,1fr)); gap:1.1rem; }
+  .item-card{
+    background:var(--panel); border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px;
+    overflow:hidden; box-shadow:5px 5px 0 rgba(0,0,0,0.25); transition:transform .15s;
+  }
+  .item-card:hover{ transform:translateY(-3px); }
+  .item-art{
+    height:150px; background:repeating-linear-gradient(45deg, var(--panel-2) 0 2px, var(--panel) 2px 4px);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .item-art .icon-block{
+    width:56px; height:56px; border-radius:6px;
+    background:linear-gradient(160deg, var(--primary), var(--primary-deep));
+    box-shadow:0 6px 18px rgba(0,0,0,0.4); border:3px solid #000;
+  }
+  .item-art.rare .icon-block{ background:linear-gradient(160deg, var(--gold), #a87a1f); }
+  .badge{
+    position:absolute; top:0.5rem; left:0.5rem; font-size:0.6rem; font-weight:800; letter-spacing:0.05em;
+    text-transform:uppercase; padding:0.25rem 0.5rem; border-radius:4px; background:rgba(0,0,0,0.6);
+    border:2px solid var(--edge); color:var(--ink);
+  }
+  .badge.rare{ color:var(--gold); border-color:var(--gold); }
+  .badge.sold{ color:var(--danger); border-color:var(--danger); background:rgba(0,0,0,0.75); }
+  .item-body{ padding:0.9rem 1rem 1.1rem; }
+  .item-body h3{ font-size:1.05rem; margin-bottom:0.3rem; }
+  .item-body .by{ font-size:0.72rem; color:var(--muted); margin-bottom:0.7rem; }
+  .item-footer{ display:flex; align-items:center; justify-content:space-between; }
+  .price{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:0.3rem; color:var(--gold); }
+  .buy-btn{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.72rem;
+    padding:0.4rem 0.7rem; border-radius:5px; border:2px solid #000; background:var(--panel-2); color:var(--ink);
+    cursor:pointer;
+  }
+  .buy-btn:hover{ border-color:var(--primary); color:var(--primary); }
+
+  footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
+
+  @media (max-width: 760px){ .topnav-links{ display:none; } }
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-left">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      </svg>
+      Cuby
+    </a>
+    <nav class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="games.html">Games</a>
+      <a href="marketplace.html" class="active">Marketplace</a>
+    </nav>
+  </div>
+  <div class="topnav-right" id="authArea">
+    <a href="login.html" class="btn btn-ghost">Sign In</a>
+    <a href="login.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</header>
+
+<div class="promo-banner">📣 Marketplace is a preview — items aren't purchasable yet.</div>
+
+<main class="page-wrap">
+  <div class="page-head">
+    <span class="eyebrow">Marketplace</span>
+    <h1>Gear up before it gets you.</h1>
+  </div>
+
+  <div class="search-row">
+    <input class="search-input" placeholder="Search items...">
+  </div>
+  <div class="filter-row">
+    <span class="filter-chip active">All</span>
+    <span class="filter-chip">Accessory</span>
+    <span class="filter-chip">Face</span>
+    <span class="filter-chip">Shirt</span>
+    <span class="filter-chip">Pants</span>
+    <span class="filter-chip">Mesh</span>
+  </div>
+
+  <div class="item-grid">
+    <div class="item-card">
+      <div class="item-art"><span class="badge">New</span><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Static Wanderer</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 250</span>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+    <div class="item-card">
+      <div class="item-art rare"><span class="badge rare">Rare</span><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Hollow Mask</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 600</span>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+    <div class="item-card">
+      <div class="item-art"><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Amber Flashlight</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 150</span>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+    <div class="item-card">
+      <div class="item-art rare"><span class="badge rare">Rare</span><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Green Visor</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 400</span>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+    <div class="item-card">
+      <div class="item-art"><span class="badge sold">Sold Out</span><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Cube Cap</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 300</span>
+          <button class="buy-btn" disabled style="opacity:0.5; cursor:default;">Sold</button>
+        </div>
+      </div>
+    </div>
+    <div class="item-card">
+      <div class="item-art"><div class="icon-block"></div></div>
+      <div class="item-body">
+        <h3>Builder Gloves</h3>
+        <div class="by">by @Dark</div>
+        <div class="item-footer">
+          <span class="price">🧱 180</span>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const savedMode = localStorage.getItem('cubyMode');
+  const params = new URLSearchParams(location.search);
+  const mode = savedMode || params.get('mode') || 'dark';
+  if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
+  document.querySelectorAll('a[href$=".html"]').forEach(a=>{
+    const base = a.getAttribute('href').split('?')[0];
+    a.href = mode === 'light' ? base + '?mode=light' : base;
+  });
+
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
+    authDomain: "cuby-48249.firebaseapp.com",
+    projectId: "cuby-48249",
+    storageBucket: "cuby-48249.firebasestorage.app",
+    messagingSenderId: "204506566879",
+    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const authArea = document.getElementById('authArea');
+
+  onAuthStateChanged(auth, (user)=>{
+    if(user && user.emailVerified){
+      authArea.innerHTML = `
+        <span class="pill"><span class="dot gold"></span>0 Cubes</span>
+        <span class="pill" style="cursor:pointer;" id="logoutPill">${user.displayName || 'Player'} — Log out</span>
+      `;
+      document.getElementById('logoutPill').addEventListener('click', ()=>signOut(auth));
+    }
+  });
+</script>
+
+</body>
+</html>

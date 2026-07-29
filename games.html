@@ -3,94 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="icon.png">
 <title>Games — Cuby</title>
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
-    --ink: #ece9f7; --muted: #8b85a3; --primary: #7c5cff; --primary-deep: #5b3ddb;
+    --ink: #ece9f7; --muted: #8b85a3; --primary: #37b673; --primary-deep: #1f8a54;
     --gold: #f5b94d; --green: #4fd18a;
   }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+
+
+
   [data-mode="light"]{
     --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
     --ink:#20242c; --muted:#6b7280;
   }
-  [data-mode="light"] .content::before{ opacity:0.08; }
-  [data-mode="light"] .nav-item .ic{ filter:none; opacity:0.55; }
-
   *{ box-sizing:border-box; margin:0; padding:0; }
-  body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; display:flex; min-height:100vh; }
+  body{ background:var(--bg); color:var(--ink); font-family:'Nunito',sans-serif; }
   a{ color:inherit; text-decoration:none; }
   h1,h2,h3{ font-family:'Baloo 2',sans-serif; }
-  h1, .logo, .game-info h3, .game-detail-body h2, .theme-name{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
+  h1, .logo, .game-detail-body h2{ font-family:'Titan One',cursive; font-weight:400; letter-spacing:0.01em; }
 
-  .sidebar{ width:220px; background:var(--panel); border-right:1px solid var(--edge); padding:1.4rem 1rem; display:flex; flex-direction:column; gap:1.8rem; position:sticky; top:0; height:100vh; }
-  .logo{ display:flex; align-items:center; gap:0.6rem; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.35rem; padding:0 0.4rem; }
-  .logo .cube{ width:28px; height:28px; border-radius:8px; background:linear-gradient(150deg, var(--primary), var(--primary-deep)); box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); animation:pulse-glow 3s ease-in-out infinite; }
-  @keyframes pulse-glow{ 0%,100%{ box-shadow:0 4px 14px rgba(124,92,255,0.4), 0 0 0 4px rgba(124,92,255,0.08); } 50%{ box-shadow:0 4px 18px rgba(124,92,255,0.6), 0 0 0 7px rgba(124,92,255,0.05); } }
-  .nav-group{ display:flex; flex-direction:column; gap:0.2rem; }
-  .nav-label{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 0.7rem; margin-bottom:0.4rem; }
-  .nav-item{ display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.7rem; border-radius:10px; font-weight:700; font-size:0.9rem; color:var(--muted); transition:background .15s, color .15s; }
-  .nav-item .ic{ font-size:1.05rem; width:20px; text-align:center; flex-shrink:0; filter:grayscale(1) opacity(0.65); transition:filter .15s; }
-  .nav-item:hover{ background:var(--panel-2); color:var(--ink); }
-  .nav-item.active{ background:linear-gradient(90deg, rgba(124,92,255,0.18), transparent); color:var(--ink); border:1px solid var(--edge); }
-  .nav-item.active .ic{ filter:none; }
-  .sidebar-footer{ margin-top:auto; display:flex; align-items:center; gap:0.7rem; padding:0.7rem; border-radius:10px; background:var(--panel-2); border:1px solid var(--edge); }
-  .sidebar-footer .av{ width:34px; height:34px; border-radius:50%; background:linear-gradient(150deg,var(--primary),var(--primary-deep)); flex-shrink:0; }
-  .sidebar-footer .name{ font-weight:800; font-size:0.85rem; }
-  .sidebar-footer .sub{ font-size:0.72rem; color:var(--muted); }
+  .topnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9rem 1.6rem; background:var(--panel); border-bottom:3px solid #000;
+    position:sticky; top:0; z-index:20; flex-wrap:wrap; gap:1rem;
+  }
+  .topnav-left{ display:flex; align-items:center; gap:2rem; }
+  .logo{ display:flex; align-items:center; gap:0.5rem; font-size:1.3rem; }
+  .logo svg{ width:26px; height:26px; }
+  .topnav-links{ display:flex; gap:1.4rem; font-weight:800; font-size:0.9rem; }
+  .topnav-links a{ color:var(--muted); padding:0.4rem 0; border-bottom:2px solid transparent; }
+  .topnav-links a:hover, .topnav-links a.active{ color:var(--ink); border-color:var(--primary); }
+  .topnav-right{ display:flex; align-items:center; gap:0.7rem; }
 
-  .main{ flex:1; }
-  .content{ padding:2.4rem 1.8rem 4rem; max-width:1100px; position:relative; }
-  .content::before{ content:''; position:absolute; top:-60px; right:-100px; width:340px; height:340px; background:radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity:0.16; filter:blur(50px); pointer-events:none; z-index:0; }
-  .content > *{ position:relative; z-index:1; }
+  .btn{
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:0.85rem;
+    padding:0.6rem 1.2rem; border-radius:6px; display:inline-block; cursor:pointer;
+    border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); transition:transform .1s;
+  }
+  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; }
+  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
+  .btn-primary:disabled{ opacity:0.7; cursor:default; }
+  .btn-ghost{ background:var(--panel-2); color:var(--ink); }
+
+  .pill{
+    display:flex; align-items:center; gap:0.4rem; background:var(--panel-2); border:2px solid var(--edge);
+    border-radius:6px; padding:0.4rem 0.8rem; font-weight:800; font-size:0.82rem;
+  }
+  .dot{ width:9px; height:9px; border-radius:50%; }
+  .dot.gold{ background:var(--gold); }
+
+  .promo-banner{
+    background:linear-gradient(90deg, var(--primary-deep), var(--primary));
+    color:#fff; padding:0.6rem 1.6rem; display:flex; justify-content:center; gap:0.6rem;
+    align-items:center; font-size:0.85rem; font-weight:700; text-align:center;
+  }
+
+  .page-wrap{ max-width:1000px; margin:0 auto; padding:2.4rem 1.6rem 4rem; }
   .page-head{ margin-bottom:2rem; }
   .page-head .eyebrow{ font-size:0.78rem; color:var(--primary); font-weight:800; letter-spacing:0.05em; text-transform:uppercase; }
   .page-head h1{ font-size:2rem; margin-top:0.4rem; }
 
-  .game-detail{
-    background:var(--panel); border:1px solid var(--edge); border-top:3px solid var(--primary); border-radius:18px; overflow:hidden;
-    box-shadow:0 24px 50px -28px rgba(0,0,0,0.6);
-  }
-    .mascot-box{ width:150px; height:170px; position:relative; flex-shrink:0; }
-  .m-head{ width:56px; height:50px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
-  .m-face{ position:absolute; top:20px; left:50%; transform:translateX(-50%); display:flex; gap:13px; }
-  .m-eye{ width:5px; height:9px; background:#0d0b14; border-radius:2px; }
-  .m-smile{ position:absolute; top:32px; left:50%; transform:translateX(-50%); width:22px; height:10px; border-bottom:3px solid #0d0b14; border-radius:0 0 12px 12px; }
-  .m-torso{ width:70px; height:58px; background:var(--primary); border:3px solid #0d0b14; border-radius:6px; position:absolute; top:58px; left:50%; transform:translateX(-50%); z-index:1; }
-  .m-arm{ width:16px; height:56px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; }
-  .m-arm.left{ top:28px; left:14px; transform:rotate(55deg); transform-origin:top center; }
-  .m-arm.right{ top:28px; right:14px; transform:rotate(-55deg); transform-origin:top center; }
-  .m-leg{ width:20px; height:46px; background:#ece9f7; border:3px solid #0d0b14; border-radius:6px; position:absolute; top:112px; }
-  .m-leg.left{ left:38px; }
-  .m-leg.right{ right:38px; }
-  .mascot-mini{ transform:scale(0.55); }
-
-  .thumb-carousel{ position:relative; width:100%; height:100%; overflow:hidden; background:linear-gradient(135deg, var(--primary), #3a2a8a); }
+  .game-detail{ background:var(--panel); border:3px solid var(--edge); border-top:3px solid var(--primary); border-radius:8px; overflow:hidden; box-shadow:6px 6px 0 rgba(0,0,0,0.25); }
+  .game-banner{ height:220px; position:relative; }
+  .thumb-carousel{ position:relative; width:100%; height:100%; overflow:hidden; background:linear-gradient(135deg, var(--primary), #1a4d33); }
   .thumb-img{ width:100%; height:100%; object-fit:contain; display:block; }
   .thumb-nav{
     position:absolute; top:50%; transform:translateY(-50%);
     background:rgba(0,0,0,0.55); border:2px solid #000; color:#fff;
     width:30px; height:30px; border-radius:5px; cursor:pointer;
     font-weight:800; font-size:1.1rem; display:flex; align-items:center; justify-content:center;
-    transition:background .15s;
   }
-  .thumb-nav:hover{ background:rgba(0,0,0,0.8); }
   .thumb-nav.prev{ left:10px; }
   .thumb-nav.next{ right:10px; }
-  .game-banner{
-    height:220px; background:linear-gradient(135deg, var(--primary), #3a2a8a);
-    position:relative; display:flex; align-items:flex-end; padding:1.4rem;
-  }
   .live-badge{
     background:#ff5b5b; color:#fff; font-size:0.7rem; font-weight:800; letter-spacing:0.04em;
-    padding:0.3rem 0.7rem; border-radius:20px; position:absolute; top:1.2rem; left:1.2rem;
+    padding:0.3rem 0.7rem; border-radius:20px; position:absolute; top:1.2rem; left:1.2rem; z-index:2;
   }
   .game-detail-body{ padding:1.6rem; }
   .game-detail-body h2{ font-size:1.6rem; margin-bottom:0.5rem; }
@@ -98,84 +89,81 @@
   .stat-row{ display:flex; gap:1.6rem; margin-bottom:1.4rem; flex-wrap:wrap; }
   .stat{ font-size:0.85rem; color:var(--muted); font-weight:700; }
   .stat b{ color:var(--ink); display:block; font-family:'Baloo 2',sans-serif; font-size:1.3rem; }
-  .btn{ font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem; padding:0.85rem 1.7rem; border-radius:6px; display:inline-block; transition:transform .1s; border:3px solid #000; box-shadow:3px 3px 0 rgba(0,0,0,0.35); }
-  .btn-primary{ background:linear-gradient(150deg,var(--primary),var(--primary-deep)); color:#fff; box-shadow:0 6px 18px rgba(124,92,255,0.35); }
-  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,0.35); }
+  .play-status{ margin-top:0.8rem; font-size:0.82rem; color:var(--muted); }
 
   footer{ text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; font-weight:700; }
+
+  @media (max-width: 760px){ .topnav-links{ display:none; } }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="logo"><svg class="cube" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-  <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
-  <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
-  <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
-</svg>Cuby</div>
-  <div class="nav-group">
-    <div class="nav-label">Play</div>
-    <a class="nav-item" href="index.html"><span class="ic">🏠</span>Home</a>
-    <a class="nav-item active" href="games.html"><span class="ic">🎮</span>Games</a>
-    <a class="nav-item" href="download.html"><span class="ic">⬇️</span>Download</a>
-    <a class="nav-item" href="settings.html"><span class="ic">⚙️</span>Settings</a>
+<header class="topnav">
+  <div class="topnav-left">
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 34 L50 16 L88 34 L88 74 L50 92 L12 74 Z" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M12 34 L50 52 L88 34 M50 52 L50 92" stroke="var(--primary)" stroke-width="7" stroke-linejoin="round" fill="none"/>
+        <path d="M34 38 L34 50" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 34 L60 46" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M32 62 Q46 74 62 60" stroke="var(--primary)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      </svg>
+      Cuby
+    </a>
+    <nav class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="games.html" class="active">Games</a>
+      <a href="marketplace.html">Marketplace</a>
+    </nav>
   </div>
-  <a href="login.html" class="sidebar-footer" style="text-decoration:none;">
-    <span class="av"></span>
-    <div><div class="name">Guest</div><div class="sub">Log in / Sign up</div></div>
-  </a>
-</aside>
+  <div class="topnav-right" id="authArea">
+    <a href="login.html" class="btn btn-ghost">Sign In</a>
+    <a href="login.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</header>
 
-<div class="main">
-  <div class="content">
-    <div class="page-head">
-      <span class="eyebrow">Games</span>
-      <h1>1 world, and counting</h1>
-    </div>
+<div class="promo-banner">📣 Cuby is in early development — thanks for testing it out!</div>
 
-    <div class="game-detail">
-      <div class="game-banner" style="padding:0;">
-        <span class="live-badge">LIVE</span>
-        <div class="thumb-carousel">
-          <img class="thumb-img" src="cuby.png" alt="Cuby game thumbnail">
-          <button class="thumb-nav prev" aria-label="Previous thumbnail">‹</button>
-          <button class="thumb-nav next" aria-label="Next thumbnail">›</button>
-        </div>
-      </div>
-      <div class="game-detail-body">
-        <h2>Cuby</h2>
-        <p>The very first Cuby world. Move, jump, sprint, and chat with other players in real time — more worlds are on the way as Cuby grows.</p>
-        <div class="stat-row">
-          <div class="stat"><b>1</b>World</div>
-          <div class="stat"><b>Multiplayer</b>Mode</div>
-          <div class="stat"><b>Free</b>To Play</div>
-        </div>
-        <button class="btn btn-primary" id="playNowBtn" style="cursor:pointer;">Play Now</button>
-        <p id="playStatus" style="margin-top:0.8rem; font-size:0.82rem; color:var(--muted);"></p>
-      </div>
-    </div>
+<main class="page-wrap">
+  <div class="page-head">
+    <span class="eyebrow">Games</span>
+    <h1>1 world, and counting</h1>
   </div>
 
-  <footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
-</div>
+  <div class="game-detail">
+    <div class="game-banner">
+      <span class="live-badge">LIVE</span>
+      <div class="thumb-carousel">
+        <img class="thumb-img" src="cuby.png" alt="Cuby game thumbnail">
+        <button class="thumb-nav prev" aria-label="Previous thumbnail">‹</button>
+        <button class="thumb-nav next" aria-label="Next thumbnail">›</button>
+      </div>
+    </div>
+    <div class="game-detail-body">
+      <h2>Cuby</h2>
+      <p>The very first Cuby world. Move, jump, sprint, and chat with other players in real time — more worlds are on the way as Cuby grows.</p>
+      <div class="stat-row">
+        <div class="stat"><b>1</b>World</div>
+        <div class="stat"><b>Multiplayer</b>Mode</div>
+        <div class="stat"><b>Free</b>To Play</div>
+      </div>
+      <button class="btn btn-primary" id="playNowBtn" style="cursor:pointer;">Play Now</button>
+      <p id="playStatus" class="play-status"></p>
+    </div>
+  </div>
+</main>
+
+<footer>© <span id="year"></span> Cuby — built by "Dark"</footer>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-  const savedTheme = localStorage.getItem('cubyTheme');
   const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  const theme = savedTheme || params.get('theme') || 'indigo';
   const mode = savedMode || params.get('mode') || 'dark';
-  if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
   if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
   document.querySelectorAll('a[href$=".html"]').forEach(a=>{
     const base = a.getAttribute('href').split('?')[0];
-    const qs = [];
-    if(theme !== 'indigo') qs.push('theme=' + theme);
-    if(mode === 'light') qs.push('mode=light');
-    a.href = qs.length ? base + '?' + qs.join('&') : base;
+    a.href = mode === 'light' ? base + '?mode=light' : base;
   });
 
   const thumbImages = ['cuby.png', 'jump_cuby.png', 'adventure.png'];
@@ -196,6 +184,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
@@ -207,53 +196,27 @@
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
-  const footer = document.querySelector('.sidebar-footer');
-  const nameEl = footer.querySelector('.name');
-  const subEl = footer.querySelector('.sub');
-  const loggedOutHref = footer.getAttribute('href');
-
-  onAuthStateChanged(auth, (user)=>{
-    if(user && user.emailVerified){
-      nameEl.textContent = user.displayName || 'Player';
-      subEl.textContent = 'Log out';
-      footer.setAttribute('href', '#');
-      footer.onclick = (e)=>{
-        e.preventDefault();
-        signOut(auth);
-      };
-    } else {
-      nameEl.textContent = 'Guest';
-      subEl.textContent = 'Log in / Sign up';
-      footer.setAttribute('href', loggedOutHref);
-      footer.onclick = null;
-    }
-  });
-</script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged as onAuthState2 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-  const firebaseConfig2 = {
-    apiKey: "AIzaSyCphf9Jj6usKWrRh5LC3kQakuNMcx6dSRE",
-    authDomain: "cuby-48249.firebaseapp.com",
-    projectId: "cuby-48249",
-    storageBucket: "cuby-48249.firebasestorage.app",
-    messagingSenderId: "204506566879",
-    appId: "1:204506566879:web:8479f9b254ffc5d966196a"
-  };
-  const app2 = initializeApp(firebaseConfig2, "playApp");
-  const auth2 = getAuth(app2);
-  const db = getFirestore(app2);
+  const db = getFirestore(app);
+  const authArea = document.getElementById('authArea');
 
   const playBtn = document.getElementById('playNowBtn');
   const playStatus = document.getElementById('playStatus');
   let currentUser = null;
+  playBtn.disabled = true;
+  playBtn.textContent = 'Checking login...';
 
-  onAuthState2(auth2, (user)=>{
+  onAuthStateChanged(auth, (user)=>{
     currentUser = (user && user.emailVerified) ? user : null;
+    playBtn.disabled = false;
+    playBtn.textContent = 'Play Now';
+
+    if(currentUser){
+      authArea.innerHTML = `
+        <span class="pill"><span class="dot gold"></span>0 Cubes</span>
+        <span class="pill" style="cursor:pointer;" id="logoutPill">${currentUser.displayName || 'Player'} — Log out</span>
+      `;
+      document.getElementById('logoutPill').addEventListener('click', ()=>signOut(auth));
+    }
   });
 
   function randomCode(){
