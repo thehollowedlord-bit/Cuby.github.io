@@ -10,13 +10,12 @@
 <style>
   :root{
     --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
-    --ink: #ece9f7; --muted: #8b85a3; --primary: #7c5cff; --primary-deep: #5b3ddb;
+    --ink: #ece9f7; --muted: #8b85a3; --primary: #37b673; --primary-deep: #1f8a54;
     --gold: #f5b94d; --green: #4fd18a;
   }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+
+
+
   [data-mode="light"]{
     --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
     --ink:#20242c; --muted:#6b7280;
@@ -114,28 +113,6 @@
     </div>
 
     <div class="settings-block">
-      <h3>Theme</h3>
-      <p>Pick an accent color for Cuby. This changes the whole site, not just this page.</p>
-      <div class="theme-grid" id="themeGrid">
-        <div class="theme-option" data-theme-value="indigo" style="--swatch:#7c5cff; --swatch-deep:#5b3ddb;">
-          <div class="swatch"></div><div class="theme-name">Indigo</div>
-        </div>
-        <div class="theme-option" data-theme-value="blue" style="--swatch:#2f8fd1; --swatch-deep:#1f6fa8;">
-          <div class="swatch"></div><div class="theme-name">Blue</div>
-        </div>
-        <div class="theme-option" data-theme-value="green" style="--swatch:#37b673; --swatch-deep:#1f8a54;">
-          <div class="swatch"></div><div class="theme-name">Green</div>
-        </div>
-        <div class="theme-option" data-theme-value="orange" style="--swatch:#ff8c42; --swatch-deep:#e5722a;">
-          <div class="swatch"></div><div class="theme-name">Orange</div>
-        </div>
-        <div class="theme-option" data-theme-value="crimson" style="--swatch:#e5484d; --swatch-deep:#b23237;">
-          <div class="swatch"></div><div class="theme-name">Crimson</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-block" style="margin-top:1.4rem;">
       <h3>Appearance</h3>
       <p>Choose between dark and light mode.</p>
       <div class="theme-grid" id="modeGrid" style="grid-template-columns:repeat(2, minmax(120px,1fr));">
@@ -158,38 +135,20 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  const savedTheme = localStorage.getItem('cubyTheme');
   const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  let currentTheme = savedTheme || params.get('theme') || 'indigo';
   let currentMode = savedMode || params.get('mode') || 'dark';
-  if(currentTheme !== 'indigo') document.documentElement.setAttribute('data-theme', currentTheme);
   if(currentMode === 'light') document.documentElement.setAttribute('data-mode', 'light');
 
-  const themeOptions = document.querySelectorAll('.theme-option[data-theme-value]');
   const modeOptions = document.querySelectorAll('.theme-option[data-mode-value]');
   const saveMsg = document.getElementById('saveMsg');
 
   function markSelected(){
-    themeOptions.forEach(opt=>{
-      opt.classList.toggle('selected', opt.dataset.themeValue === currentTheme);
-    });
     modeOptions.forEach(opt=>{
       opt.classList.toggle('selected', opt.dataset.modeValue === currentMode);
     });
   }
   markSelected();
-
-  themeOptions.forEach(opt=>{
-    opt.addEventListener('click', ()=>{
-      currentTheme = opt.dataset.themeValue;
-      if(currentTheme === 'indigo') document.documentElement.removeAttribute('data-theme');
-      else document.documentElement.setAttribute('data-theme', currentTheme);
-      markSelected();
-      updateNavLinks();
-      saveMsg.textContent = '';
-    });
-  });
 
   modeOptions.forEach(opt=>{
     opt.addEventListener('click', ()=>{
@@ -205,12 +164,11 @@
   document.getElementById('saveBtn').addEventListener('click', function(){
     const btn = this;
     try{
-      localStorage.setItem('cubyTheme', currentTheme);
       localStorage.setItem('cubyMode', currentMode);
       btn.disabled = true;
       btn.textContent = 'Saved ✓';
       btn.classList.add('saved');
-      saveMsg.textContent = 'Your theme will stick around now.';
+      saveMsg.textContent = 'Your setting will stick around now.';
       saveMsg.style.color = 'var(--green)';
       setTimeout(()=>{
         btn.disabled = false;
@@ -226,10 +184,7 @@
   function updateNavLinks(){
     document.querySelectorAll('a[href$=".html"]').forEach(a=>{
       const base = a.getAttribute('href').split('?')[0];
-      const qs = [];
-      if(currentTheme !== 'indigo') qs.push('theme=' + currentTheme);
-      if(currentMode === 'light') qs.push('mode=light');
-      a.href = qs.length ? base + '?' + qs.join('&') : base;
+      a.href = currentMode === 'light' ? base + '?mode=light' : base;
     });
   }
   updateNavLinks();

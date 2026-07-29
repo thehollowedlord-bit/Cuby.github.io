@@ -10,13 +10,12 @@
 <style>
   :root{
     --bg: #0d0b14; --panel: #171320; --panel-2: #1d1829; --edge: #2a2438;
-    --ink: #ece9f7; --muted: #8b85a3; --primary: #7c5cff; --primary-deep: #5b3ddb;
+    --ink: #ece9f7; --muted: #8b85a3; --primary: #37b673; --primary-deep: #1f8a54;
     --gold: #f5b94d; --green: #4fd18a;
   }
-  [data-theme="blue"]{ --primary:#2f8fd1; --primary-deep:#1f6fa8; }
-  [data-theme="green"]{ --primary:#37b673; --primary-deep:#1f8a54; }
-  [data-theme="orange"]{ --primary:#ff8c42; --primary-deep:#e5722a; }
-  [data-theme="crimson"]{ --primary:#e5484d; --primary-deep:#b23237; }
+
+
+
   [data-mode="light"]{
     --bg:#f3f5fa; --panel:#ffffff; --panel-2:#eef1f7; --edge:#dde3ee;
     --ink:#20242c; --muted:#6b7280;
@@ -223,12 +222,9 @@
     }
   });
 
-  const savedTheme = localStorage.getItem('cubyTheme');
   const savedMode = localStorage.getItem('cubyMode');
   const params = new URLSearchParams(location.search);
-  const theme = savedTheme || params.get('theme') || 'indigo';
   const mode = savedMode || params.get('mode') || 'dark';
-  if(theme !== 'indigo') document.documentElement.setAttribute('data-theme', theme);
   if(mode === 'light') document.documentElement.setAttribute('data-mode', 'light');
 </script>
 
